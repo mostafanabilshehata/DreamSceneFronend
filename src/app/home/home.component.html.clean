@@ -1,0 +1,96 @@
+<!-- Navigation handled by app component -->
+
+<!-- Partners Section -->
+
+<p-carousel 
+  [value]="cards" 
+  [numVisible]="3" 
+  [numScroll]="1"
+  [circular]="true" 
+  [autoplayInterval]="3000"
+  [showIndicators]="false"
+  [showNavigators]="false"
+  class="custom-carousel">
+
+  <ng-template pTemplate="item" let-card let-i="index">
+    <div class="card-item">
+      <div class="card-content">
+        {{ card.title }}
+      </div>
+    </div>
+  </ng-template>
+</p-carousel>
+
+<!-- Hero Section -->
+<div class="bgPullover" appAnimateOnScroll="animate__fadeIn">
+    <div class="bg-overLay d-flex flex-column justify-content-center align-items-center">
+        <h3 class="pullTittle" appAnimateOnScroll="animate__slideInUp">Italian Merino Pullover</h3>
+        <h6 class="pullSubTittle my-4" appAnimateOnScroll="animate__slideInUp">finest wool</h6>
+        <button class="btnDicoverNow" appAnimateOnScroll="animate__slideInUp" type="button">
+            discover now
+            <i class="fa-solid fa-arrow-right"></i>
+        </button>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="container my-5">
+    <div class="row text-center">
+        <div class="col-md-4 p-4" appAnimateOnScroll="animate__fadeInLeft">
+            <i class="fa-solid fa-award fa-3x mb-3"></i>
+            <h4 class="text-capitalize text-main mb-3">Satisfaction Guarantee</h4>
+            <p class="text-muted">
+                <small>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Ad rerum, porro
+                    incidunt quos consequuntur quis accusamus eum, beatae sapiente laboriosam ipsa ipsam soluta.
+                </small>
+            </p>
+        </div>
+        
+        <div class="col-md-4 p-4" appAnimateOnScroll="animate__slideInUp">
+            <i class="fa-solid fa-leaf fa-3x mb-3"></i>
+            <h4 class="text-capitalize text-main mb-3">Organic Cotton</h4>
+            <p class="text-muted">
+                <small>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Ad rerum, porro
+                    incidunt quos consequuntur quis accusamus eum, beatae sapiente laboriosam ipsa ipsam soluta.
+                </small>
+            </p>
+        </div>
+        
+        <div class="col-md-4 p-4" appAnimateOnScroll="animate__fadeInRight">
+            <i class="fa-solid fa-shield-halved fa-3x mb-3"></i>
+            <h4 class="text-capitalize text-main mb-3">Privacy</h4>
+            <p class="text-muted">
+                <small>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis quae
+                    voluptas nulla dolorem fugiat quis eius exercitationem, ullam, cumque, molestiae debitis.
+                </small>
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Partner Details Dialog -->
+<p-dialog 
+    [(visible)]="visible" 
+    [modal]="true" 
+    [breakpoints]="breakpoints"
+    [style]="{ width: '50vw' }"
+    [draggable]="false" 
+    [resizable]="false">
+    
+    <ng-template pTemplate="header">
+        <h2>Partner Details</h2>
+    </ng-template>
+    
+    <div class="p-fluid">
+        <p>Partner details will be shown here.</p>
+    </div>
+    
+    <ng-template pTemplate="footer">
+        <button pButton pRipple type="button" label="Close" icon="pi pi-times" class="p-button-text" (click)="visible = false"></button>
+    </ng-template>
+</p-dialog>
+
+<!-- Footer handled by app component -->

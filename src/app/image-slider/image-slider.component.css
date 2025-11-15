@@ -1,0 +1,33 @@
+.subtitle p{
+    text-transform: uppercase;
+    font-family: 'IBM Plex Serif', serif;
+}
+
+.subtitle h3 a{
+    text-transform: capitalize;
+    font-family: 'IBM Plex Serif', serif;
+    color:  #282d51;
+}
+ .btnViewAll {
+    width: 90px;
+    height: 40px;
+    /* margin: auto; */
+    overflow: hidden;
+    padding: 5px;
+    text-align: center;
+    text-transform: capitalize;
+    border: none;
+    font-size: 20px;
+    background-color: #282d51;
+    color: #f0f3f2;
+    transition: all .5s ease-in-out;
+}
+.btnViewAll:hover {
+    width: 150px;
+    /* background-color: #f0f3f2;
+    color: black; */
+}
+
+.imgSlider{
+border: 1px solid black;
+}

@@ -1,0 +1,83 @@
+<!-- Navigation handled by app component -->
+<div class="position-relative">
+  <!-- Hero Slider (background layer) -->
+  <div class="vh-100 hero-slider-wrapper ">
+      <p-carousel
+          [value]="heroImages"
+          [numVisible]="1"
+          [numScroll]="1"
+          [circular]="true"
+          [autoplayInterval]="4000"
+          [showIndicators]="true"
+          [showNavigators]="false"
+          styleClass="hero-slider">
+          <ng-template pTemplate="item" let-img>
+              <div class="hero-slide">
+                  <img [src]="img.src" [alt]="img.alt" class="hero-slide-img" />
+              </div>
+          </ng-template>
+      </p-carousel>
+  </div>
+
+  <div class="bg-overLay fontStyle d-flex flex-column">
+
+   
+
+      <div class="headerContent mt-auto ms-4 p-4 ">
+          <h1 class="text-capitalize text-light text-white animate__delay-2s"
+              appAnimateOnScroll="animate__lightSpeedInLeft">
+              Our services : Rent . Sale . Execution</h1>
+      </div>
+  </div>
+
+</div>
+<!-- Partners Section -->
+<section class="partners-section">
+    <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="section-title">Our Partners</h2>
+      <div class="divider"></div>
+  </div>
+  
+  <div class="card-container" 
+       (mouseenter)="pause()" 
+       (mouseleave)="resume()">
+  
+       <div *ngFor="let card of cards; let i = index" 
+       class="card"
+       [class.active]="i === activeIndex"
+       [style.zIndex]="getZIndex(i)"
+       [style.transform]="getTransform(i)"
+       [style.background]="card.gradient">
+  
+    <img *ngIf="card.imageUrl" [src]="card.imageUrl" [alt]="card.title" class="card-image">
+    <i *ngIf="!card.imageUrl" [class]="card.icon + ' card-icon'"></i>
+    <h3>{{ card.title }}</h3>
+    <p>{{ card.description }}</p>
+  </div>
+  
+    <!-- Arrows -->
+    <button class="nav-btn left" (click)="prev()">‹</button>
+    <button class="nav-btn right" (click)="next()">›</button>
+  </div>
+  
+  <!-- Dots -->
+  <div class="dots">
+    <span *ngFor="let card of cards; let i = index"
+          class="dot"
+          [class.active-dot]="i === activeIndex"
+          (click)="goToSlide(i)">
+    </span>
+  </div>
+  
+  <!-- View All Partners Button -->
+  <div class="text-center">
+    <button class="view-more-btn" type="button" routerLink="/partners">
+        View All Partners
+        <i class="pi pi-arrow-right"></i>
+    </button>
+  </div>
+  </div>
+  </section>
+
+<!-- Footer handled by app component -->

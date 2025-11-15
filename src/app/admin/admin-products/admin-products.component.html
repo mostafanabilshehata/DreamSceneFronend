@@ -1,0 +1,252 @@
+<div class="admin-items-container">
+  <div class="header">
+    <h2>Items Management</h2>
+    <button class="btn-primary" (click)="openAddItemModal()">+ Add Item</button>
+  </div>
+
+  <div *ngIf="loading" class="loading">Loading items...</div>
+
+  <div *ngIf="!loading" class="items-table">
+    <table>
+      <thead>
+        <tr>
+          <th>Image</th>
+          <th>Name</th>
+          <th>Category</th>
+          <th>Sale Price</th>
+          <th>Rent Price</th>
+          <th>Availability</th>
+          <th>Stock</th>
+          <th>Rating</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of items">
+          <td>
+            <img [src]="item.imageCover" [alt]="item.name" class="item-image" 
+                 (click)="item.imageCover && openFullScreenImage(item.imageCover)" 
+                 [style.cursor]="item.imageCover ? 'pointer' : 'default'">
+          </td>
+          <td>{{ item.name }}</td>
+          <td>Category ID: {{ item.categoryId }} / Subcategory ID: {{ item.subcategoryId }}</td>
+          <td>{{ item.salePrice ? ('$' + item.salePrice) : '-' }}</td>
+          <td>{{ item.rentPrice ? ('$' + item.rentPrice + '/day') : '-' }}</td>
+          <td>
+            <span class="badge" [ngClass]="getAvailabilityBadgeClass(item.availability)">
+              {{ item.availability }}
+            </span>
+          </td>
+          <td>
+            <span [ngClass]="getStockStatusClass(item.stockQuantity || 0)">
+              {{ item.stockQuantity || 0 }}
+            </span>
+          </td>
+          <td>⭐ {{ item.rating || 0 }}</td>
+          <td>
+            <div class="action-buttons">
+              <button class="btn-small btn-edit" (click)="openEditItemModal(item)">Edit</button>
+              <button class="btn-small btn-delete" (click)="deleteItem(item.id)">Delete</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="items.length === 0" class="no-data">
+      No items found. Click "Add Item" to create one.
+    </div>
+  </div>
+</div>
+
+<!-- Add Item Modal -->
+<div *ngIf="showAddModal" class="modal-overlay" (click)="showAddModal = false">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h3>Add New Item</h3>
+    <form (ngSubmit)="saveItem()">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Item Name *</label>
+          <input type="text" [(ngModel)]="newItem.name" name="name" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Item Image</label>
+        <input type="file" (change)="onNewItemImageSelect($event)" accept="image/*" class="file-input">
+        <div *ngIf="newItemImagePreview" class="image-preview-thumbnail" (click)="openFullScreenImage(newItemImagePreview)">
+          <img [src]="newItemImagePreview" alt="Preview">
+          <span class="preview-hint">Click to view full size</span>
+        </div>
+        <small>Or enter image URL:</small>
+        <input type="text" [(ngModel)]="newItem.imageCover" name="imageCover" placeholder="https://example.com/image.jpg">
+      </div>
+
+      <div class="form-group">
+        <label>Description</label>
+        <textarea [(ngModel)]="newItem.description" name="description" rows="3"></textarea>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Category *</label>
+          <select [(ngModel)]="newItem.categoryId" name="categoryId" 
+                  (ngModelChange)="onCategoryChange($event, false)" required>
+            <option [ngValue]="0">Select Category</option>
+            <option *ngFor="let cat of categories" [ngValue]="cat.id">{{ cat.name }}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Subcategory *</label>
+          <select [(ngModel)]="newItem.subcategoryId" name="subcategoryId" 
+                  [disabled]="!newItem.categoryId || newItem.categoryId === 0 || loadingSubcategories" required>
+            <option [ngValue]="0">{{ loadingSubcategories ? 'Loading subcategories...' : 'Select Subcategory' }}</option>
+            <option *ngFor="let sub of getSubcategories(newItem.categoryId)" [ngValue]="sub.id">
+              {{ sub.name }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Sale Price</label>
+          <input type="number" [(ngModel)]="newItem.salePrice" name="salePrice" step="0.01" min="0">
+        </div>
+        <div class="form-group">
+          <label>Rent Price (per day)</label>
+          <input type="number" [(ngModel)]="newItem.rentPrice" name="rentPrice" step="0.01" min="0">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Availability *</label>
+          <select [(ngModel)]="newItem.availability" name="availability" required>
+            <option value="SALE">Sale Only</option>
+            <option value="RENT">Rent Only</option>
+            <option value="BOTH">Both Sale & Rent</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Stock Quantity *</label>
+          <input type="number" [(ngModel)]="newItem.stockQuantity" name="stockQuantity" min="0" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Rating (0-5)</label>
+        <input type="number" [(ngModel)]="newItem.rating" name="rating" step="0.1" min="0" max="5">
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" (click)="showAddModal = false">Cancel</button>
+        <button type="submit" class="btn-primary" [disabled]="uploadingImage">
+          <span *ngIf="uploadingImage">Uploading...</span>
+          <span *ngIf="!uploadingImage">Save Item</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Edit Item Modal -->
+<div *ngIf="showEditModal" class="modal-overlay" (click)="showEditModal = false">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h3>Edit Item</h3>
+    <form (ngSubmit)="updateItem()">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Item Name *</label>
+          <input type="text" [(ngModel)]="editItem.name" name="editName" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Item Image</label>
+        <input type="file" (change)="onEditItemImageSelect($event)" accept="image/*" class="file-input">
+        <div *ngIf="editItemImagePreview" class="image-preview-thumbnail" (click)="openFullScreenImage(editItemImagePreview)">
+          <img [src]="editItemImagePreview" alt="Preview">
+          <span class="preview-hint">Click to view full size</span>
+        </div>
+        <small>Or enter image URL:</small>
+        <input type="text" [(ngModel)]="editItem.imageCover" name="editImageCover" placeholder="https://example.com/image.jpg">
+      </div>
+
+      <div class="form-group">
+        <label>Description</label>
+        <textarea [(ngModel)]="editItem.description" name="editDescription" rows="3"></textarea>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Category *</label>
+          <select [(ngModel)]="editItem.categoryId" name="editCategoryId" 
+                  [compareWith]="compareById"
+                  (ngModelChange)="onCategoryChange($event, true)" required>
+            <option [ngValue]="0">Select Category</option>
+            <option *ngFor="let cat of categories" [ngValue]="cat.id">{{ cat.name }}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Subcategory *</label>
+          <select [(ngModel)]="editItem.subcategoryId" name="editSubcategoryId" 
+                  [compareWith]="compareById"
+                  [disabled]="!editItem.categoryId || editItem.categoryId === 0 || loadingSubcategories" required>
+            <option [ngValue]="0">{{ loadingSubcategories ? 'Loading subcategories...' : 'Select Subcategory' }}</option>
+            <option *ngFor="let sub of getSubcategories(editItem.categoryId)" [ngValue]="sub.id">
+              {{ sub.name }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Sale Price</label>
+          <input type="number" [(ngModel)]="editItem.salePrice" name="editSalePrice" step="0.01" min="0">
+        </div>
+        <div class="form-group">
+          <label>Rent Price (per day)</label>
+          <input type="number" [(ngModel)]="editItem.rentPrice" name="editRentPrice" step="0.01" min="0">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Availability *</label>
+          <select [(ngModel)]="editItem.availability" name="editAvailability" required>
+            <option value="SALE">Sale Only</option>
+            <option value="RENT">Rent Only</option>
+            <option value="BOTH">Both Sale & Rent</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Stock Quantity *</label>
+          <input type="number" [(ngModel)]="editItem.stockQuantity" name="editStockQuantity" min="0" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Rating (0-5)</label>
+        <input type="number" [(ngModel)]="editItem.rating" name="editRating" step="0.1" min="0" max="5">
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" (click)="showEditModal = false">Cancel</button>
+        <button type="submit" class="btn-primary" [disabled]="uploadingImage">
+          <span *ngIf="uploadingImage">Uploading...</span>
+          <span *ngIf="!uploadingImage">Update Item</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Full Screen Image Preview Modal -->
+<div *ngIf="showImagePreview" class="fullscreen-overlay" (click)="closeFullScreenImage()">
+  <div class="fullscreen-content">
+    <button class="close-btn" (click)="closeFullScreenImage()">×</button>
+    <img [src]="fullScreenImageUrl" alt="Full size image">
+  </div>
+</div>

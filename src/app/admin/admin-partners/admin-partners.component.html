@@ -1,0 +1,185 @@
+<div class="admin-partners-container">
+  <div class="header">
+    <h2>Partners Management</h2>
+    <button class="btn-primary" (click)="openAddPartnerModal()">+ Add Partner</button>
+  </div>
+
+  <div *ngIf="loading" class="loading">Loading partners...</div>
+
+  <div *ngIf="!loading" class="partners-grid">
+    <div *ngFor="let partner of partners" class="partner-card">
+      <div class="partner-header" [ngStyle]="getGradientStyle(partner.gradient || '#667eea, #764ba2')">
+        <img *ngIf="partner.imageUrl" [src]="partner.imageUrl" [alt]="partner.title" class="partner-image" (click)="openFullScreenImage(partner.imageUrl)">
+        <i *ngIf="!partner.imageUrl" [class]="partner.icon"></i>
+      </div>
+      <div class="partner-body">
+        <h3>{{ partner.title }}</h3>
+        <p class="category">{{ partner.category }}</p>
+        <p class="description">{{ partner.description }}</p>
+        <div class="partner-footer">
+          <div class="info">
+            <span class="since">Since {{ partner.since }}</span>
+            <span class="rating">⭐ {{ partner.rating }}</span>
+          </div>
+          <div class="actions">
+            <button class="btn-small btn-edit" (click)="openEditPartnerModal(partner)">Edit</button>
+            <button class="btn-small btn-delete" (click)="deletePartner(partner.id)">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="partners.length === 0" class="no-data">
+      No partners found. Click "Add Partner" to create one.
+    </div>
+  </div>
+</div>
+
+<!-- Add Partner Modal -->
+<div *ngIf="showAddModal" class="modal-overlay" (click)="closeAddModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h3>Add New Partner</h3>
+    <form (ngSubmit)="savePartner()">
+      <!-- Image Upload -->
+      <div class="form-group">
+        <label>Partner Logo/Image</label>
+        <div class="image-upload-section">
+          <input type="file" #fileInput (change)="onNewPartnerImageSelect($event)" accept="image/*" style="display: none">
+          <button type="button" class="btn-secondary" (click)="fileInput.click()" [disabled]="uploadingImage">
+            {{ newPartnerImagePreview ? 'Change Image' : 'Select Image' }}
+          </button>
+          <div *ngIf="newPartnerImagePreview" class="image-preview">
+            <img [src]="newPartnerImagePreview" alt="Preview">
+            <button type="button" class="btn-remove" (click)="newPartnerImagePreview = ''; newPartnerImageFile = null">×</button>
+          </div>
+          <div *ngIf="uploadingImage" class="uploading">
+            <span>Uploading image...</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Partner Name *</label>
+        <input type="text" [(ngModel)]="newPartner.title" name="title" required>
+      </div>
+
+      <div class="form-group">
+        <label>Category *</label>
+        <input type="text" [(ngModel)]="newPartner.category" name="category" required placeholder="e.g., Furniture, Decor, Lighting">
+      </div>
+
+      <div class="form-group">
+        <label>Description</label>
+        <textarea [(ngModel)]="newPartner.description" name="description" rows="3"></textarea>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Icon Class (fallback if no image) *</label>
+          <input type="text" [(ngModel)]="newPartner.icon" name="icon" required placeholder="e.g., fas fa-couch">
+        </div>
+        <div class="form-group">
+          <label>Since *</label>
+          <input type="text" [(ngModel)]="newPartner.since" name="since" required placeholder="e.g., 2020">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Gradient Colors *</label>
+          <input type="text" [(ngModel)]="newPartner.gradient" name="gradient" required placeholder="e.g., #667eea, #764ba2">
+          <small>Enter two hex colors separated by comma</small>
+        </div>
+        <div class="form-group">
+          <label>Rating (0-5) *</label>
+          <input type="number" [(ngModel)]="newPartner.rating" name="rating" step="0.1" min="0" max="5" required>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" (click)="closeAddModal()">Cancel</button>
+        <button type="submit" class="btn-primary" [disabled]="uploadingImage">
+          {{ uploadingImage ? 'Uploading...' : 'Save Partner' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Edit Partner Modal -->
+<div *ngIf="showEditModal" class="modal-overlay" (click)="closeEditModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h3>Edit Partner</h3>
+    <form (ngSubmit)="updatePartner()">
+      <!-- Image Upload -->
+      <div class="form-group">
+        <label>Partner Logo/Image</label>
+        <div class="image-upload-section">
+          <input type="file" #editFileInput (change)="onEditPartnerImageSelect($event)" accept="image/*" style="display: none">
+          <button type="button" class="btn-secondary" (click)="editFileInput.click()" [disabled]="uploadingImage">
+            {{ editPartnerImagePreview ? 'Change Image' : 'Select Image' }}
+          </button>
+          <div *ngIf="editPartnerImagePreview" class="image-preview">
+            <img [src]="editPartnerImagePreview" alt="Preview">
+            <button type="button" class="btn-remove" (click)="editPartnerImagePreview = ''; editPartnerImageFile = null">×</button>
+          </div>
+          <div *ngIf="uploadingImage" class="uploading">
+            <span>Uploading image...</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Partner Name *</label>
+        <input type="text" [(ngModel)]="editPartner.title" name="title" required>
+      </div>
+
+      <div class="form-group">
+        <label>Category *</label>
+        <input type="text" [(ngModel)]="editPartner.category" name="category" required placeholder="e.g., Furniture, Decor, Lighting">
+      </div>
+
+      <div class="form-group">
+        <label>Description</label>
+        <textarea [(ngModel)]="editPartner.description" name="description" rows="3"></textarea>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Icon Class (fallback if no image) *</label>
+          <input type="text" [(ngModel)]="editPartner.icon" name="icon" required placeholder="e.g., fas fa-couch">
+        </div>
+        <div class="form-group">
+          <label>Since *</label>
+          <input type="text" [(ngModel)]="editPartner.since" name="since" required placeholder="e.g., 2020">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Gradient Colors *</label>
+          <input type="text" [(ngModel)]="editPartner.gradient" name="gradient" required placeholder="e.g., #667eea, #764ba2">
+          <small>Enter two hex colors separated by comma</small>
+        </div>
+        <div class="form-group">
+          <label>Rating (0-5) *</label>
+          <input type="number" [(ngModel)]="editPartner.rating" name="rating" step="0.1" min="0" max="5" required>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" (click)="closeEditModal()">Cancel</button>
+        <button type="submit" class="btn-primary" [disabled]="uploadingImage">
+          {{ uploadingImage ? 'Uploading...' : 'Update Partner' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Full Screen Image Preview -->
+<div *ngIf="showImagePreview" class="image-preview-modal" (click)="closeFullScreenImage()">
+  <div class="image-preview-content" (click)="$event.stopPropagation()">
+    <button class="close-btn" (click)="closeFullScreenImage()">×</button>
+    <img [src]="fullScreenImageUrl" alt="Full Screen Preview">
+  </div>

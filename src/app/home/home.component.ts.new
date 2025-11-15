@@ -1,0 +1,85 @@
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { CarouselModule } from 'primeng/carousel';
+import { CardModule } from 'primeng/card';
+import { ButtonModule } from 'primeng/button';
+import { ProductsService } from '../services/products.service';
+import { CartService } from '../services/cart.service';
+
+interface Partner {
+  name: string;
+  logo: string;
+  website: string;
+}
+
+@Component({
+  selector: 'app-home',
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterLink,
+    CarouselModule,
+    CardModule,
+    ButtonModule
+  ],
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.css'],
+  providers: [ProductsService, CartService]
+})
+export class HomeComponent implements OnInit {
+  partners: Partner[] = [
+    {
+      name: 'Partner 1',
+      logo: 'https://via.placeholder.com/200x100?text=Partner+1',
+      website: '#'
+    },
+    {
+      name: 'Partner 2',
+      logo: 'https://via.placeholder.com/200x100?text=Partner+2',
+      website: '#'
+    },
+    {
+      name: 'Partner 3',
+      logo: 'https://via.placeholder.com/200x100?text=Partner+3',
+      website: '#'
+    },
+    {
+      name: 'Partner 4',
+      logo: 'https://via.placeholder.com/200x100?text=Partner+4',
+      website: '#'
+    },
+    {
+      name: 'Partner 5',
+      logo: 'https://via.placeholder.com/200x100?text=Partner+5',
+      website: '#'
+    }
+  ];
+
+  responsiveOptions = [
+    {
+      breakpoint: '1024px',
+      numVisible: 3,
+      numScroll: 1
+    },
+    {
+      breakpoint: '768px',
+      numVisible: 2,
+      numScroll: 1
+    },
+    {
+      breakpoint: '560px',
+      numVisible: 1,
+      numScroll: 1
+    }
+  ];
+
+  constructor(
+    private productsService: ProductsService,
+    private cartService: CartService
+  ) {}
+
+  ngOnInit(): void {
+    // Initialization code here if needed
+  }
+}

@@ -1,0 +1,183 @@
+<div class="admin-orders-container">
+  <div class="header">
+    <h2>Orders Management</h2>
+    <p class="text-muted">Manage customer orders and update status</p>
+  </div>
+
+  <div *ngIf="loading" class="loading">
+    <i class="fas fa-spinner fa-spin me-2"></i>
+    Loading orders...
+  </div>
+
+  <div *ngIf="!loading" class="orders-table">
+    <table>
+      <thead>
+        <tr>
+          <th>Order ID</th>
+          <th>Customer</th>
+          <th>Items</th>
+          <th>Total Amount</th>
+          <th>Status</th>
+          <th>Order Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of orders">
+          <td>#{{ order.id }}</td>
+          <td>
+            <div class="customer-info">
+              <div class="customer-name">{{ order.userName }}</div>
+              <div class="customer-email">{{ order.userEmail }}</div>
+              <div class="customer-phone">{{ order.userPhone }}</div>
+            </div>
+          </td>
+          <td>{{ order.items.length || 0 }} items</td>
+          <td class="fw-bold text-success">{{ getTotalAmount(order) }} EGP</td>
+          <td>
+            <span class="status-badge" [ngClass]="getStatusBadgeClass(order.status)">
+              {{ order.status }}
+            </span>
+          </td>
+          <td>{{ order.createdAt ? formatDate(order.createdAt) : 'N/A' }}</td>
+          <td>
+            <div class="action-buttons">
+              <button class="btn-small btn-view" (click)="viewOrderDetails(order)" title="View Details">
+                <i class="fas fa-eye"></i>
+              </button>
+              <button class="btn-small btn-approve" 
+                      *ngIf="order.status === 'PENDING'"
+                      (click)="updateOrderStatus(order.id, 'APPROVED')"
+                      title="Approve">
+                <i class="fas fa-check"></i>
+              </button>
+              <button class="btn-small btn-complete" 
+                      *ngIf="order.status === 'APPROVED'"
+                      (click)="updateOrderStatus(order.id, 'COMPLETED')"
+                      title="Complete">
+                <i class="fas fa-check-double"></i>
+              </button>
+              <button class="btn-small btn-reject" 
+                      *ngIf="order.status === 'PENDING' || order.status === 'APPROVED'"
+                      (click)="openRejectModal(order)"
+                      title="Reject">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="orders.length === 0" class="no-data">
+      <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+      <p>No orders found.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Order Details Modal -->
+<div *ngIf="showDetailsModal && selectedOrder" class="modal-overlay" (click)="closeDetailsModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Order Details #{{ selectedOrder.id }}</h3>
+      <button class="btn-close" (click)="closeDetailsModal()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    
+    <div class="modal-body">
+      <div class="detail-section">
+        <h4>Customer Information</h4>
+        <div class="info-grid">
+          <div class="info-item">
+            <label><i class="fas fa-user me-2"></i>Name:</label>
+            <span>{{ selectedOrder.userName }}</span>
+          </div>
+          <div class="info-item">
+            <label><i class="fas fa-envelope me-2"></i>Email:</label>
+            <span>{{ selectedOrder.userEmail }}</span>
+          </div>
+          <div class="info-item">
+            <label><i class="fas fa-phone me-2"></i>Phone:</label>
+            <span>{{ selectedOrder.userPhone }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-section" *ngIf="selectedOrder.status === 'REJECTED' && selectedOrder.rejectionReason">
+        <div class="alert alert-danger">
+          <strong><i class="fas fa-exclamation-triangle me-2"></i>Rejection Reason:</strong>
+          <p class="mb-0 mt-2">{{ selectedOrder.rejectionReason }}</p>
+        </div>
+      </div>
+
+      <div class="detail-section">
+      <h4>Order Items</h4>
+      <div class="items-list">
+        <div *ngFor="let item of selectedOrder.items" class="order-item-detail">
+          <div class="item-info">
+            <span class="item-name">{{ item.itemName }}</span>
+            <span class="badge badge-sm" [ngClass]="{
+              'bg-success': item.type === 'SALE',
+              'bg-primary': item.type === 'RENT'
+            }">
+              {{ item.type === 'SALE' ? 'Buy' : 'Rent' }}
+            </span>
+          </div>
+          <div class="item-details">
+            <span>Quantity: {{ item.quantity }}</span>
+            <span *ngIf="item.type === 'RENT' && item.rentDays"> × {{ item.rentDays }} days</span>
+            <span class="item-price">{{ item.price }} EGP</span>
+          </div>
+          <div class="item-total">
+            <span *ngIf="item.type === 'SALE'">{{ item.price * item.quantity }} EGP</span>
+            <span *ngIf="item.type === 'RENT' && item.rentDays">
+              {{ item.price * item.quantity * item.rentDays }} EGP
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="total-section">
+        <strong>Total Amount:</strong>
+        <strong class="text-success">{{ getTotalAmount(selectedOrder) }} EGP</strong>
+      </div>
+    </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-secondary" (click)="closeDetailsModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Reject Order Modal -->
+<div *ngIf="showRejectModal && orderToReject" class="modal-overlay" (click)="closeRejectModal()">
+  <div class="modal-content modal-sm" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Reject Order #{{ orderToReject.id }}</h3>
+      <button class="btn-close" (click)="closeRejectModal()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    
+    <div class="modal-body">
+      <p class="text-muted mb-3">Please provide a reason for rejecting this order:</p>
+      <textarea 
+        class="form-control" 
+        [(ngModel)]="rejectionReason" 
+        rows="4"
+        placeholder="Enter rejection reason..."
+        maxlength="500"></textarea>
+      <small class="text-muted">{{ rejectionReason.length }}/500 characters</small>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-secondary" (click)="closeRejectModal()">Cancel</button>
+      <button class="btn-danger" (click)="confirmReject()" [disabled]="!rejectionReason.trim()">
+        <i class="fas fa-times me-2"></i>
+        Reject Order
+      </button>
+    </div>
+  </div>
+</div>

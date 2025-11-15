@@ -1,0 +1,59 @@
+<app-nav></app-nav>
+<div class="products-page">
+    <div class="container-title">
+        <h1 class="products-title">Our products</h1>
+        <div class="divider"></div>
+    </div>
+    
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1>Where style speaks, trends resonate, fashion flourishes</h1>
+            <p>
+                Unveiling a fashion destination where trends blend seamlessly with your
+                individual style aspirations.
+            </p>
+        </div>
+
+        <div class="grid-container">
+                <div class="card" *ngFor="let product of filteredProducts">
+                    <div class="image-wrapper">
+                        <p-image [src]="product.imageCover" [alt]="product.title"  [preview]="true"
+                            [style]="{ width: '100%', height: '100%', 'object-fit': 'cover' }">
+                        </p-image>
+                    </div>
+                    <span class="product-category">{{product.category.name}}</span>
+                    <h3 class="product-title">{{product.title.split(' ').slice(0,2).join(' ')}}</h3>
+                    
+                    <!-- Sale/Rent Price Display -->
+                    <div class="price-container">
+                        <div class="d-flex align-items-center justify-content-around">
+                            <div *ngIf="canSale(product)" class="price-item">
+                                <span class="price-text">Sale: {{product.salePrice}} EGP</span>
+                            </div>
+                            <div *ngIf="canRent(product)" class="price-item">
+                                <span class="price-text">Rent: {{product.rentPrice}} EGP</span>
+                            </div>
+                        </div>
+                        <div class="rating-section">
+                            <i class="fas fa-star rating-color"></i>
+                            <span class="rating-text">{{product.ratingsAverage}}</span>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Sale/Rent Buttons -->
+                    <div class="button-group">
+                        <button *ngIf="canSale(product)" 
+                                class="btn btn-sale w-100 my-1" 
+                                (click)="addToCart(product._id, 'sale')">
+                            Add to Cart (Sale)
+                        </button>
+                        <button *ngIf="canRent(product)" 
+                                class="btn btn-rent w-100 my-1" 
+                                (click)="addToCart(product._id, 'rent')">
+                            Add to Cart (Rent)
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+</div>

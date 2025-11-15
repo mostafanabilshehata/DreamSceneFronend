@@ -1,0 +1,38 @@
+.fontStyle {
+    font-family: 'IBM Plex Serif', serif;
+}
+.bg-contactLink {
+    /* position: relative; */
+    background-color: #282d51;
+    /* z-index: 1; */
+}
+
+.bg-nav {
+    position: fixed;
+    top:32px;
+    background-color: #17172c;
+    color: #f4f4f4;
+}
+.bg-navPOsition {
+   
+    top:0px;
+    
+}
+
+.nav-item .nav-link {
+    color: white;
+    font-weight: bold;
+}
+.contactUs{
+    position: absolute;
+    /* text-align: center; */
+    /* width: 100%;  */
+   /* display: flex;   
+   flex-direction: column;
+   justify-content: center;
+   align-items: center; */
+   /* margin: auto; */
+    top: 150px;
+   
+}
+

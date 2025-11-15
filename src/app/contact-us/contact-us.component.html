@@ -1,0 +1,101 @@
+<div class="bg-contactLink fontStyle text-center  py-1  ">
+    <a class="text-white text-decoration-none">Contact us</a>
+</div>
+
+<div class="container-fluid bg-nav" [ngClass]="{ 'bg-navPOsition': scrolled }">
+    <nav class="navbar navbar-expand-lg ">
+        <a class="navbar-brand" href="#">
+            <img src="../../assets/images/bLogo.png" alt="" width="100">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav m-auto mb-2 mb-lg-0 ">
+                <li class="nav-item dropdown mx-2">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        shop
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <li><a class="dropdown-item" href="#">shirts</a></li>
+                        <li><a class="dropdown-item" href="#">Another action</a></li>
+                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown mx-2">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        contact us
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <li><a class="dropdown-item" href="#">shirts</a></li>
+                        <li><a class="dropdown-item" href="#">Another action</a></li>
+                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item mx-2">
+                    <a class="nav-link" href="#">about us</a>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav  my-2 my-lg-0">
+                <li class="nav-item  mx-2">
+                    <a class="nav-link " href="#" id="navbarDropdownMenuLink" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-regular fa-user"></i>
+                    </a>
+                </li>
+                <li class="nav-item  mx-2">
+                    <a class="nav-link " href="#" id="navbarDropdownMenuLink" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </a>
+                </li>
+                <li class="nav-item mx-2">
+                    <a class="nav-link " href="#" id="navbarDropdownMenuLink" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-solid fa-bag-shopping " style="color:white"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+    </nav>
+</div>
+
+
+<div class="contactUs w-100 " >
+    <h2 class="text-capitalize text-center  mb-2 ">contact us</h2>
+    <h5 class=" text-center  mb-2">For further queries, please contact us through: </h5>
+
+    <p class="text-center  text-capitalize mb-2 "> <strong>customer service :</strong><span>+2011121 / +2011454</span></p>
+    <p class="text-center  text-capitalize mb-5 "><strong>email : </strong><span>support Lorem.shop</span></p>
+    <h5  class="text-center  text-capitalize mb-4">or fill this form</h5>
+
+    <form class="d-flex  justify-content-center align-items-center  flex-column  ">
+        <!-- <div class="d-flex  justify-content-center align-items-center    my-1   "> -->
+        <div class="form-group w-75"> 
+            <label for="FormControlName">Name </label>
+            <input type="text" class="form-control" id="FormControlName" placeholder="enter your name">
+        </div>
+        <div class="form-group w-75  "> 
+            <label for="exampleFormControlInput1">Email </label>
+            <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+          </div>
+        <!-- </div> -->
+            <div class="form-group px-2 my-1 w-75"> 
+            <label for="phoneNumber">Phone Number </label>
+            <input type="tel" class="form-control" id="phoneNumber" placeholder="011">
+          </div>
+        <div class="form-group px-2 my-1 w-75">
+          <label for="exampleFormControlTextarea1">Message</label>
+          <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+        </div>
+
+        <div class=" flex justify-center  px-2 my-2">
+            <p-button  class=" Submit "  label="Send" [rounded]="true"/>
+        </div>
+      </form>
+    </div>

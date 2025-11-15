@@ -1,0 +1,12 @@
+
+<section class="gallery-section">
+    <h2 class="gallery-title">Gallery</h2>
+     <div class="divider"></div>
+  
+    <div class="masonry">
+      <div class="masonry-item" *ngFor="let img of images">
+        <p-image [src]="img.src" [alt]="img.alt" preview></p-image>
+      </div>
+    </div>
+  </section>
+  

@@ -1,0 +1,109 @@
+.checkout-container {
+  min-height: 60vh;
+  padding-top: 120px;
+}
+
+.order-item-img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+}
+
+.order-items {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.order-item {
+  transition: background-color 0.2s;
+}
+
+.order-item:hover {
+  background-color: #f8f9fa;
+}
+
+.form-control.is-invalid {
+  border-color: #dc3545;
+}
+
+.invalid-feedback {
+  display: block;
+}
+
+.btn-success {
+  background-color: #28a745;
+  border-color: #28a745;
+}
+
+.btn-success:hover:not(:disabled) {
+  background-color: #218838;
+  border-color: #1e7e34;
+}
+
+.btn-success:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.card-header {
+  font-weight: 600;
+}
+
+.sticky-top {
+  position: sticky;
+}
+
+@media (max-width: 991px) {
+  .sticky-top {
+    position: relative !important;
+    top: 0 !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .checkout-container {
+    padding: 15px;
+    margin-top: 100px;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  h3, h5 {
+    font-size: 1.2rem;
+  }
+
+  .form-label {
+    font-size: 14px;
+  }
+
+  .form-control, .form-select {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .btn {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .card-body {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .checkout-container {
+    margin-top: 90px;
+    padding: 10px;
+  }
+
+  h2 {
+    font-size: 1.3rem;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}

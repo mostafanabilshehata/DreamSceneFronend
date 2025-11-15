@@ -1,0 +1,189 @@
+<div class="user-orders-container container py-5" style="margin-top: 200px;">
+  <div class="row">
+    <div class="col-12">
+      <h2 class="h3 fw-bold mb-4">
+        <i class="fas fa-box me-2"></i>
+        Track My Orders
+      </h2>
+
+      <!-- Search Form -->
+      <div class="card mb-4">
+        <div class="card-body">
+          <div class="row align-items-end">
+            <div class="col-md-8">
+              <label for="searchEmail" class="form-label">Enter your email to track orders:</label>
+              <input 
+                type="email" 
+                class="form-control form-control-lg" 
+                id="searchEmail"
+                [(ngModel)]="searchEmail"
+                (keyup.enter)="searchOrders()"
+                placeholder="your.email@example.com">
+            </div>
+            <div class="col-md-4 mt-3 mt-md-0">
+              <button 
+                class="btn btn-primary btn-lg w-100" 
+                (click)="searchOrders()"
+                [disabled]="loading">
+                <span *ngIf="!loading">
+                  <i class="fas fa-search me-2"></i>
+                  Search Orders
+                </span>
+                <span *ngIf="loading">
+                  <i class="fas fa-spinner fa-spin me-2"></i>
+                  Searching...
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- No Orders Found -->
+      <div class="alert alert-info" *ngIf="searched && !loading && orders.length === 0">
+        <i class="fas fa-info-circle me-2"></i>
+        No orders found for this email address. Please check your email or place a new order.
+      </div>
+
+      <!-- Orders List -->
+      <div class="orders-list" *ngIf="orders.length > 0">
+        <div class="order-card card mb-3" *ngFor="let order of orders">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+              <h5 class="mb-0">
+                Order #{{order.id}}
+                <span class="badge ms-2" [ngClass]="getStatusBadgeClass(order.status)">
+                  <i class="fas {{getStatusIcon(order.status)}} me-1"></i>
+                  {{order.status}}
+                </span>
+              </h5>
+              <small class="text-muted">
+                <i class="far fa-calendar me-1"></i>
+                {{order.createdAt | date: 'medium'}}
+              </small>
+            </div>
+            <div class="text-end">
+              <div class="text-muted small">Total Amount</div>
+              <h4 class="mb-0 text-success">{{order.totalAmount || calculateOrderTotal(order)}} EGP</h4>
+            </div>
+          </div>
+          
+          <div class="card-body">
+            <!-- Customer Info -->
+            <div class="row mb-3">
+              <div class="col-md-4">
+                <small class="text-muted">Customer Name</small>
+                <p class="mb-0 fw-bold">
+                  <i class="fas fa-user me-2"></i>
+                  {{order.userName}}
+                </p>
+              </div>
+              <div class="col-md-4">
+                <small class="text-muted">Email</small>
+                <p class="mb-0">
+                  <i class="fas fa-envelope me-2"></i>
+                  {{order.userEmail}}
+                </p>
+              </div>
+              <div class="col-md-4">
+                <small class="text-muted">Phone</small>
+                <p class="mb-0">
+                  <i class="fas fa-phone me-2"></i>
+                  {{order.userPhone}}
+                </p>
+              </div>
+            </div>
+
+            <!-- Rejection Reason -->
+            <div class="alert alert-danger mb-3" *ngIf="order.status === 'REJECTED' && order.rejectionReason">
+              <strong>
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                Rejection Reason:
+              </strong>
+              <p class="mb-0">{{order.rejectionReason}}</p>
+            </div>
+
+            <!-- Order Items -->
+            <h6 class="mb-3">Order Items:</h6>
+            <div class="table-responsive">
+              <table class="table table-sm table-hover">
+                <thead class="table-light">
+                  <tr>
+                    <th>Item Name</th>
+                    <th>Type</th>
+                    <th>Quantity</th>
+                    <th>Days</th>
+                    <th>Price</th>
+                    <th class="text-end">Subtotal</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of order.items">
+                    <td>
+                      <strong>{{item.itemName}}</strong>
+                    </td>
+                    <td>
+                      <span class="badge badge-sm" [ngClass]="{
+                        'bg-success': item.type === 'SALE',
+                        'bg-primary': item.type === 'RENT'
+                      }">
+                        {{item.type === 'SALE' ? 'Buy' : 'Rent'}}
+                      </span>
+                    </td>
+                    <td>{{item.quantity}}</td>
+                    <td>
+                      <span *ngIf="item.type === 'RENT' && item.rentDays">{{item.rentDays}} days</span>
+                      <span *ngIf="item.type === 'SALE'">-</span>
+                    </td>
+                    <td>{{item.price}} EGP</td>
+                    <td class="text-end fw-bold">
+                      <span *ngIf="item.type === 'SALE'">
+                        {{item.price * item.quantity}} EGP
+                      </span>
+                      <span *ngIf="item.type === 'RENT' && item.rentDays">
+                        {{item.price * item.quantity * item.rentDays}} EGP
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Order Status Info -->
+            <div class="mt-3 p-3 bg-light rounded">
+              <small class="text-muted">
+                <i class="fas fa-info-circle me-2"></i>
+                <span *ngIf="order.status === 'PENDING'">
+                  Your order is being reviewed. We will contact you soon.
+                </span>
+                <span *ngIf="order.status === 'APPROVED'">
+                  Your order has been approved! We will contact you for delivery arrangements.
+                </span>
+                <span *ngIf="order.status === 'COMPLETED'">
+                  Your order has been completed. Thank you for your business!
+                </span>
+                <span *ngIf="order.status === 'REJECTED'">
+                  Unfortunately, your order was rejected. Please contact us for more information.
+                </span>
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Help Section -->
+      <div class="card mt-4">
+        <div class="card-body">
+          <h5 class="card-title">
+            <i class="fas fa-question-circle me-2"></i>
+            Need Help?
+          </h5>
+          <p class="mb-0">
+            If you have any questions about your order, please contact us at:
+            <strong>support&#64;britishhouse.com</strong> or call <strong>+20 XXX XXX XXXX</strong>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

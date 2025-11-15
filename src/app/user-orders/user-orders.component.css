@@ -1,0 +1,81 @@
+.user-orders-container {
+  min-height: 60vh;
+  padding-top: 120px;
+}
+
+.order-card {
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.order-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.card-header h5 {
+  color: #333;
+  font-weight: 600;
+}
+
+.table {
+  margin-bottom: 0;
+}
+
+.table-hover tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.badge {
+  font-size: 0.85rem;
+  padding: 0.35em 0.65em;
+}
+
+.badge-sm {
+  font-size: 0.75rem;
+  padding: 0.25em 0.5em;
+}
+
+.bg-warning {
+  background-color: #ffc107 !important;
+}
+
+.bg-info {
+  background-color: #17a2b8 !important;
+}
+
+.bg-success {
+  background-color: #28a745 !important;
+}
+
+.bg-danger {
+  background-color: #dc3545 !important;
+}
+
+.text-success {
+  color: #28a745 !important;
+}
+
+.alert {
+  border-radius: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .card-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+
+  .card-header .text-end {
+    text-align: left !important;
+    margin-top: 10px;
+  }
+
+  .table {
+    font-size: 0.85rem;
+  }
+}

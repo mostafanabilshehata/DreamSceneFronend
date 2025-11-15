@@ -1,0 +1,53 @@
+<footer class="wave-footer">
+    <div class="container">
+        <div class="footer-content">
+            <!-- Company Info -->
+            <div class="footer-column">
+                <h4 class="footer-heading">Dream Scene</h4>
+                <p class="footer-description">
+                    Established in 2017, our studio has collaborated with ballet companies and academies across numerous countries, bringing our craftsmanship to stages around the world.
+
+We create refined ballet costumes and bespoke stage décor designed to elevate every performance. Our work blends elegance, comfort, and durability supporting dancers and enhancing the artistic vision behind each production.
+                </p>
+                <div class="social-links">
+                    <a href="#" aria-label="Facebook"><i class="pi pi-facebook"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="pi pi-instagram"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="pi pi-twitter"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="pi pi-linkedin"></i></a>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="footer-column">
+                <h4 class="footer-heading">Quick Links</h4>
+                <ul class="footer-links-list">
+                    <li><a routerLink="/aboutUs">About Us</a></li>
+                    <li *ngFor="let category of categories">
+                        <a [routerLink]="['/categories', category.id]">{{ category.name }}</a>
+                    </li>
+                    <li><a routerLink="/special-order">Special Order</a></li>
+                    <li><a routerLink="/partners">Our Partners</a></li>
+                </ul>
+            </div>
+
+
+            <!-- Contact Info -->
+            <div class="footer-column">
+                <h4 class="footer-heading">Get In Touch</h4>
+                <ul class="footer-contact-list">
+                    <li><i class="pi pi-map-marker"></i> 123 Fashion Street, London, UK</li>
+                    <li><i class="pi pi-phone"></i> +44 (0) 20 1234 5678</li>
+                    <li><i class="pi pi-envelope"></i> info&#64;britishhouse.com</li>
+                    <li><i class="pi pi-clock"></i> Mon - Sat: 9:00 AM - 6:00 PM</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Copyright -->
+        <div class="footer-bottom">
+            <p class="footer-copyright">
+                &copy; 2025 Dream Scene. All rights reserved. | Designed with <i class="pi pi-heart"></i>
+            </p>
+        </div>
+    </div>
+</footer>

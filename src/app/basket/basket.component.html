@@ -1,0 +1,162 @@
+<div class="basket-container container py-5" style="margin-top: 200px;">
+  <div class="row">
+    <div class="col-12">
+      <h2 class="h3 fw-bold mb-4">
+        <i class="fas fa-shopping-basket me-2"></i>
+        Shopping Basket
+      </h2>
+
+      <!-- Empty Basket Message -->
+      <div *ngIf="basket.items.length === 0" class="empty-basket text-center py-5">
+        <i class="fas fa-shopping-basket fa-4x text-muted mb-3"></i>
+        <h4 class="text-muted">Your basket is empty</h4>
+        <p class="text-muted mb-4">Add some items to get started!</p>
+        <div class="d-flex gap-3 justify-content-center">
+          <button class="btn btn-primary btn-lg" (click)="continueShopping()">
+            <i class="fas fa-shopping-bag me-2"></i>
+            Continue Shopping
+          </button>
+          <button class="btn btn-outline-primary btn-lg" routerLink="/special-order">
+            <i class="fas fa-star me-2"></i>
+            Special Order
+          </button>
+        </div>
+      </div>
+
+      <!-- Basket Items -->
+      <div *ngIf="basket.items.length > 0">
+        <div class="basket-items">
+          <div class="basket-item card mb-3" *ngFor="let basketItem of basket.items">
+            <div class="card-body">
+              <div class="row align-items-center">
+                <!-- Item Image -->
+                <div class="col-md-2">
+                  <img 
+                    [src]="basketItem.item.imageCover || 'assets/images/placeholder.jpg'" 
+                    [alt]="basketItem.item.name"
+                    class="img-fluid rounded basket-item-image">
+                </div>
+
+                <!-- Item Details -->
+                <div class="col-md-4">
+                  <h5 class="mb-1">{{basketItem.item.name}}</h5>
+                  <span class="badge" [ngClass]="{
+                    'bg-success': basketItem.type === 'SALE',
+                    'bg-primary': basketItem.type === 'RENT'
+                  }">
+                    {{basketItem.type === 'SALE' ? 'Buy' : 'Rent'}}
+                  </span>
+                  <p class="text-muted mb-0 mt-2">
+                    <small>{{basketItem.item.description || 'No description'}}</small>
+                  </p>
+                </div>
+
+                <!-- Quantity Controls -->
+                <div class="col-md-2">
+                  <label class="form-label small">Quantity</label>
+                  <div class="input-group input-group-sm">
+                    <button 
+                      class="btn btn-outline-secondary" 
+                      type="button"
+                      (click)="updateQuantity(basketItem.item.id, basketItem.type, basketItem.quantity - 1)">
+                      <i class="fas fa-minus"></i>
+                    </button>
+                    <input 
+                      type="number" 
+                      class="form-control text-center" 
+                      [(ngModel)]="basketItem.quantity"
+                      (change)="updateQuantity(basketItem.item.id, basketItem.type, basketItem.quantity)"
+                      min="1"
+                      max="{{basketItem.item.stockQuantity}}">
+                    <button 
+                      class="btn btn-outline-secondary" 
+                      type="button"
+                      (click)="updateQuantity(basketItem.item.id, basketItem.type, basketItem.quantity + 1)"
+                      [disabled]="basketItem.quantity >= (basketItem.item.stockQuantity || 0)">
+                      <i class="fas fa-plus"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Rent Days (if applicable) -->
+                <div class="col-md-2" *ngIf="basketItem.type === 'RENT'">
+                  <label class="form-label small">Rent Days</label>
+                  <input 
+                    type="number" 
+                    class="form-control form-control-sm" 
+                    [(ngModel)]="basketItem.rentDays"
+                    (change)="updateRentDays(basketItem.item.id, basketItem.rentDays || 1)"
+                    min="1"
+                    placeholder="Days">
+                </div>
+
+                <!-- Price -->
+                <div class="col-md-2" [ngClass]="{'col-md-2': basketItem.type === 'RENT', 'col-md-4': basketItem.type === 'SALE'}">
+                  <div class="text-end">
+                    <p class="text-muted small mb-1">
+                      <span *ngIf="basketItem.type === 'SALE'">
+                        {{basketItem.item.salePrice}} EGP × {{basketItem.quantity}}
+                      </span>
+                      <span *ngIf="basketItem.type === 'RENT'">
+                        {{basketItem.item.rentPrice}} EGP/day × {{basketItem.quantity}} × {{basketItem.rentDays}} days
+                      </span>
+                    </p>
+                    <h5 class="fw-bold mb-0">{{getItemTotal(basketItem)}} EGP</h5>
+                  </div>
+                </div>
+
+                <!-- Remove Button -->
+                <div class="col-12 mt-2">
+                  <button 
+                    class="btn btn-sm btn-outline-danger" 
+                    (click)="removeItem(basketItem.item.id, basketItem.type)">
+                    <i class="fas fa-trash-alt me-1"></i>
+                    Remove
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Basket Summary -->
+        <div class="row mt-4">
+          <div class="col-md-8">
+            <button class="btn btn-outline-secondary me-2" (click)="continueShopping()">
+              <i class="fas fa-arrow-left me-2"></i>
+              Continue Shopping
+            </button>
+            <button class="btn btn-outline-primary me-2" routerLink="/special-order">
+              <i class="fas fa-star me-2"></i>
+              Special Order
+            </button>
+            <button class="btn btn-outline-danger" (click)="clearBasket()">
+              <i class="fas fa-trash me-2"></i>
+              Clear Basket
+            </button>
+          </div>
+          <div class="col-md-4">
+            <div class="card bg-light">
+              <div class="card-body">
+                <h5 class="card-title">Order Summary</h5>
+                <hr>
+                <div class="d-flex justify-content-between mb-2">
+                  <span>Total Items:</span>
+                  <strong>{{basket.totalItems}}</strong>
+                </div>
+                <div class="d-flex justify-content-between mb-3">
+                  <span class="h5">Total Amount:</span>
+                  <strong class="h5 text-success">{{basket.totalAmount}} EGP</strong>
+                </div>
+                <button class="btn btn-success w-100 btn-lg" (click)="goToCheckout()">
+                  <i class="fas fa-credit-card me-2"></i>
+                  Proceed to Checkout
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

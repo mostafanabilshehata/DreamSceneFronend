@@ -1,0 +1,29 @@
+<div class="login-container">
+    <div class="w-75 mx-auto py-4">
+        <h4>Login Now : </h4>
+        <div *ngIf="apiErorr" class="alert alert-danger">{{apiErorr}}</div>
+
+        <form (ngSubmit)="handelLogin(loginForm)" [formGroup]="loginForm">
+
+        
+        <label for="username">Username:</label>
+        <input formControlName="username" type="text" class="form-control  mb-2" id="username" />
+        <div *ngIf="loginForm.get('username')?.errors && loginForm.get('username')?.touched" class="alert alert-danger">
+            <p *ngIf="loginForm.get('username')?.getError('required')" class="m-0">Username is required</p>
+        </div>        <label for="password">Password:</label>
+        <input formControlName="password" type="password" class="form-control  mb-2" id="password" />
+        <div *ngIf="loginForm.get('password')?.errors && loginForm.get('password')?.touched"
+            class="alert alert-danger">
+            <p *ngIf="loginForm.get('password')?.getError('minlength')" class="m-0">Password must be at least 3 characters</p>
+            <p *ngIf="loginForm.get('password')?.getError('required')" class="m-0">password is required</p>
+        </div>
+
+       
+        <button [disabled]="loginForm.invalid" type="submit"
+            class="btn d-block ms-auto btnLogin">
+            <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i>
+            <span *ngIf="!isLoading">Login</span>
+        </button>
+    </form>
+    </div>
+</div>

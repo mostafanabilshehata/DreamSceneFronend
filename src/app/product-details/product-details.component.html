@@ -1,0 +1,192 @@
+<div class="container product-details-container">
+<div class="row align-items-center justify-content-between m-auto">
+<div class="col-md-6  " >
+      
+          <p-galleria  [value]="imageDetails"  [responsiveOptions]="responsiveOptions" [containerStyle]="{'max-width': '660px'}" [numVisible]="5"> 
+            <ng-template pTemplate="item" let-item>
+                <img [src]="item.itemImageSrc" style="width: 100%;  display: block;" [alt]="item.alt" />
+            </ng-template>
+            
+            <ng-template   pTemplate="thumbnail" let-item >
+                <div  class=" justify-content-center" >
+                    <img   [src]="item.thumbnailImageSrc" style="width:100%;" [alt]="item.alt" />
+                </div>
+            </ng-template>        
+        </p-galleria>
+
+<!-- Fallback if no images -->
+<img class="w-100" *ngIf="!imageDetails || imageDetails.length === 0" [src]="itemDetails?.imageCover || 'assets/images/placeholder.jpg'" alt="{{itemDetails?.name}}">
+</div>
+<div class="col-md-6">
+<h3 class="h4 fw-bolder mb-2">{{itemDetails?.name}}</h3>
+<p class="text-muted p-3">{{itemDetails?.description}}</p>
+
+<!-- Pricing Section -->
+<div class="pricing-section mb-3">
+    <div class="d-flex align-items-center justify-content-between mb-2" *ngIf="itemDetails?.salePrice">
+        <div>
+            <span class="text-muted">Sale Price:</span>
+            <h4 class="text-success fw-bold mb-0">{{itemDetails?.salePrice}} EGP</h4>
+        </div>
+    </div>
+    <div class="d-flex align-items-center justify-content-between mb-2" *ngIf="itemDetails?.rentPrice">
+        <div>
+            <span class="text-muted">Rent Price:</span>
+            <h4 class="text-primary fw-bold mb-0">{{itemDetails?.rentPrice}} EGP/day</h4>
+        </div>
+    </div>
+</div>
+
+<!-- Rating and Stock -->
+<div class="d-flex align-items-center justify-content-between mb-3">
+    <div *ngIf="itemDetails?.rating">
+        <i class="fas fa-star rating-color"></i>
+        <span class="text-muted fw-bold font-sm">{{itemDetails?.rating}}/5</span>
+    </div>
+    <div>
+        <span class="badge bg-info">{{itemDetails?.availability}}</span>
+        <span class="text-muted ms-2" *ngIf="itemDetails?.stockQuantity">Stock: {{itemDetails?.stockQuantity}}</span>
+    </div>
+</div>
+
+<!-- Action Buttons -->
+<div class="action-buttons">
+    <!-- Success message when added to cart -->
+    <div class="alert alert-success mb-3" *ngIf="addedToCart">
+        <i class="fas fa-check-circle me-2"></i>
+        Item added to basket successfully!
+    </div>
+
+    <!-- Quantity Selector -->
+    <div class="mb-3" *ngIf="isInStock()">
+        <label class="form-label fw-bold">Quantity:</label>
+        <div class="input-group" style="max-width: 150px;">
+            <button class="btn btn-outline-secondary" type="button" 
+                    (click)="selectedQuantity = selectedQuantity > 1 ? selectedQuantity - 1 : 1">
+                <i class="fas fa-minus"></i>
+            </button>
+            <input type="number" class="form-control text-center" 
+                   [(ngModel)]="selectedQuantity" 
+                   min="1" 
+                   [max]="itemDetails?.stockQuantity || 1">
+            <button class="btn btn-outline-secondary" type="button" 
+                    (click)="selectedQuantity = selectedQuantity < (itemDetails?.stockQuantity || 1) ? selectedQuantity + 1 : selectedQuantity">
+                <i class="fas fa-plus"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Rent Days Selector (only show for rent items) -->
+    <div class="mb-3" *ngIf="itemDetails?.availability === 'RENT' || itemDetails?.availability === 'BOTH'">
+        <label class="form-label fw-bold">Rent Duration (Days):</label>
+        <input type="number" class="form-control" 
+               [(ngModel)]="selectedRentDays" 
+               min="1" 
+               placeholder="Number of days"
+               style="max-width: 200px;">
+        <small class="text-muted" *ngIf="itemDetails?.availability === 'RENT'">
+            Total: {{(itemDetails?.rentPrice || 0) * selectedQuantity * selectedRentDays}} EGP
+        </small>
+    </div>
+
+    <!-- Show Buy button ONLY if item is for SALE only -->
+    <button class="pbtn bg-success text-white w-100 mb-2" 
+            *ngIf="itemDetails?.availability === 'SALE'"
+            [disabled]="!isInStock()"
+            (click)="addToBuy()">
+        <i class="fas fa-shopping-cart me-2"></i>
+        Add to Cart (Buy) - {{itemDetails?.salePrice}} EGP
+    </button>
+    
+    <!-- Show Rent button ONLY if item is for RENT only -->
+    <button class="pbtn bg-primary text-white w-100 mb-2" 
+            *ngIf="itemDetails?.availability === 'RENT'"
+            [disabled]="!isInStock()"
+            (click)="addToRent()">
+        <i class="fas fa-calendar-alt me-2"></i>
+        Add to Cart (Rent) - {{itemDetails?.rentPrice}} EGP/day
+    </button>
+    
+    <!-- Show BOTH buttons if item supports BOTH -->
+    <button class="pbtn bg-success text-white w-100 mb-2" 
+            *ngIf="itemDetails?.availability === 'BOTH'"
+            [disabled]="!isInStock()"
+            (click)="addToBuy()">
+        <i class="fas fa-shopping-cart me-2"></i>
+        Add to Cart (Buy) - {{itemDetails?.salePrice}} EGP
+    </button>
+    
+    <button class="pbtn bg-primary text-white w-100 mb-2" 
+            *ngIf="itemDetails?.availability === 'BOTH'"
+            [disabled]="!isInStock()"
+            (click)="addToRent()">
+        <i class="fas fa-calendar-alt me-2"></i>
+        Add to Cart (Rent) - {{itemDetails?.rentPrice}} EGP/day × {{selectedRentDays}} days
+    </button>
+    
+    <!-- Out of Stock message -->
+    <div class="alert alert-danger" *ngIf="!isInStock()">
+        <i class="fas fa-exclamation-circle me-2"></i>
+        Out of Stock
+    </div>
+</div>
+
+<div class="card flex justify-center mt-3">
+    
+    <p-accordion >
+        <p-accordionTab header="Description">
+          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Doloribus unde eius similique, eum eligendi praesentium sint, quia illum quae error cupiditate est tempora! Recusandae modi eligendi dolor ipsam quam id?
+        </p-accordionTab>
+        <p-accordionTab header="size chart">
+            <table border="1" cellpadding="10" cellspacing="0">
+                <thead>
+                  <tr>
+                    <th>Size</th>
+                    <th>Chest (in)</th>
+                    <th>Neck (in)</th>
+                    <th>Waist (in)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>S</td>
+                    <td>34-36</td>
+                    <td>14-14.5</td>
+                    <td>28-30</td>
+                  </tr>
+                  <tr>
+                    <td>M</td>
+                    <td>38-40</td>
+                    <td>15-15.5</td>
+                    <td>32-34</td>
+                  </tr>
+                  <tr>
+                    <td>L</td>
+                    <td>42-44</td>
+                    <td>16-16.5</td>
+                    <td>36-38</td>
+                  </tr>
+                  <tr>
+                    <td>XL</td>
+                    <td>46-48</td>
+                    <td>17-17.5</td>
+                    <td>40-42</td>
+                  </tr>
+                  <tr>
+                    <td>XXL</td>
+                    <td>50-52</td>
+                    <td>18-18.5</td>
+                    <td>44-46</td>
+                  </tr>
+                </tbody>
+              </table> 
+              
+        </p-accordionTab>
+        <p-accordionTab header="store location">
+            Content 2
+          </p-accordionTab>
+      </p-accordion>
+ </div>
+</div>
+</div>
+</div>

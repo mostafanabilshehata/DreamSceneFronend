@@ -1,0 +1,332 @@
+.products-page {
+  margin-top: 100px;
+  width: 100%;
+}
+
+.container-title {
+  max-width: 1400px;
+  margin: 0 auto 30px;
+  padding: 0 2rem;
+}
+
+.products-title {
+  font-size: 2.5rem;
+  color: #282d51;
+  margin-bottom: 15px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-align: center;
+}
+
+.divider {
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, #282d51, #434F98, #282d51);
+  margin: 0 auto 20px;
+  border-radius: 2px;
+}
+
+/* === Section === */
+.hero-section {
+  background: linear-gradient(135deg, #f5f7fa 0%, #e8eef5 100%);
+  color: #282d51;
+  text-align: center;
+  padding: 4rem 2rem 6rem;
+  width: 100%;
+  box-shadow: 0 10px 40px rgba(40, 45, 81, 0.08);
+}
+
+.hero-content {
+  max-width: 1000px;
+  margin: 0 auto 4rem;
+  animation: fadeInDown 0.8s ease;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-content h1 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  line-height: 1.4;
+  margin-bottom: 1.2rem;
+  color: #282d51;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.05);
+}
+
+.hero-content p {
+  color: #5a6c8f;
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.btn {
+  background: linear-gradient(135deg, #282d51, #434F98);
+  color: #fff;
+  border: none;
+  padding: 0.9rem 2.5rem;
+  border-radius: 30px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(40, 45, 81, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.btn:hover {
+  background: linear-gradient(135deg, #434F98, #282d51);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(40, 45, 81, 0.4);
+}
+
+/* === Image Grid === */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 3rem;
+  justify-items: center;
+  align-items: start;
+  padding: 0 2rem;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.card {
+  background: white;
+  padding: 1.2rem;
+  border-radius: 20px;
+  box-shadow: 0 5px 20px rgba(40, 45, 81, 0.1);
+  transition: all 0.4s ease;
+  width: 100%;
+  max-width: 280px;
+  display: flex;
+  flex-direction: column;
+}
+
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 40px rgba(40, 45, 81, 0.2);
+}
+
+
+/* Keep oval shape for normal card image */
+.image-wrapper {
+  width: 100%;
+  height: 220px;
+  border-radius: 15px;
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background: linear-gradient(135deg, #f0f3f8 0%, #d9e2ec 100%);
+}
+
+.image-wrapper:hover {
+  transform: scale(1.03);
+  box-shadow: 0 8px 25px rgba(40, 45, 81, 0.2); 
+}
+
+/* Style only the image inside the CARD (not preview) */
+.image-wrapper ::ng-deep .p-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 15px;
+}
+
+/* ✅ Fix preview flickering issue */
+::ng-deep .p-image-preview-container img {
+  border-radius: 0 !important; /* remove oval shape for lightbox */
+  transform: none !important; /* stop inherited scaling */
+  transition: none !important; /* stop animation conflict */
+  pointer-events: none !important;
+}
+
+/* Product Info */
+.product-category {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #434F98;
+  margin-top: 0.8rem;
+}
+
+.product-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0.4rem 0;
+  line-height: 1.3;
+  color: #282d51;
+}
+
+/* === Sale/Rent Button Styles === */
+.price-container {
+  margin: 12px 0 8px;
+  padding: 8px;
+  background: linear-gradient(135deg, #f8f9fc 0%, #e8eef5 100%);
+  border-radius: 8px;
+}
+
+.price-container > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+}
+
+.price-item {
+  padding: 3px 8px;
+  background: white;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(40, 45, 81, 0.08);
+}
+
+.price-text {
+  color: #282d51 !important;
+  font-size: 0.85rem !important;
+  font-weight: 700 !important;
+  white-space: nowrap;
+}
+
+.rating-section {
+  margin-top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.rating-color {
+  color: #ffc107;
+  font-size: 0.9rem;
+}
+
+.rating-text {
+  font-size: 0.85rem !important;
+  font-weight: 600 !important;
+  color: #282d51 !important;
+}
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.btn-sale {
+  background: linear-gradient(135deg, #28a745, #20c997);
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+  box-shadow: 0 3px 10px rgba(40, 167, 69, 0.3);
+}
+
+.btn-sale:hover {
+  background: linear-gradient(135deg, #20c997, #28a745);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+}
+
+.btn-rent {
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+  box-shadow: 0 3px 10px rgba(0, 123, 255, 0.3);
+}
+
+.btn-rent:hover {
+  background: linear-gradient(135deg, #0056b3, #007bff);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 123, 255, 0.4);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .products-page {
+    padding: 20px 10px;
+  }
+
+  .products-title {
+    font-size: 1.8rem;
+  }
+
+  .hero-content h1 {
+    font-size: 1.5rem;
+    padding: 0 15px;
+  }
+
+  .hero-content p {
+    font-size: 14px;
+    padding: 0 15px;
+  }
+
+  .grid-container {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1.5rem;
+    padding: 15px;
+  }
+
+  .card {
+    max-width: 100%;
+  }
+
+  .product-title {
+    font-size: 14px;
+  }
+
+  .price-container {
+    font-size: 13px;
+  }
+
+  .btn-buy, .btn-rent {
+    padding: 8px 12px;
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .products-title {
+    font-size: 1.5rem;
+  }
+
+  .hero-content h1 {
+    font-size: 1.2rem;
+  }
+
+  .grid-container {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 10px;
+  }
+
+  .card {
+    max-width: 100%;
+  }
+}

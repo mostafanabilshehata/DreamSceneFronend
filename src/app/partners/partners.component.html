@@ -1,0 +1,49 @@
+<div class="partners-page">
+  <div class="page-header">
+    <h1 class="page-title">Our Trusted Partners</h1>
+    <div class="divider"></div>
+    <p class="page-subtitle">We collaborate with industry leaders to bring you the best quality and service</p>
+  </div>
+
+  <div class="container" *ngIf="loading">
+    <div class="text-center">
+      <p>Loading partners...</p>
+    </div>
+  </div>
+
+  <div class="container" *ngIf="error">
+    <div class="alert alert-danger">
+      {{ error }}
+    </div>
+  </div>
+
+  <div class="partners-grid" *ngIf="!loading && !error">
+    <div class="partner-card" *ngFor="let partner of partners">
+      <div class="partner-logo-wrapper">
+        <img [src]="partner.imageUrl || 'assets/images/placeholder.jpg'" [alt]="partner.title" class="partner-logo">
+      </div>
+      <div class="partner-content">
+        <h3 class="partner-name">{{ partner.title }}</h3>
+        <p class="partner-category" *ngIf="partner.category">{{ partner.category }}</p>
+        <p class="partner-description">{{ partner.description }}</p>
+        <div class="partner-stats">
+          <div class="stat-item" *ngIf="partner.since">
+            <i class="pi pi-calendar"></i>
+            <span>Since {{ partner.since }}</span>
+          </div>
+          <div class="stat-item" *ngIf="partner.rating">
+            <i class="pi pi-star-fill"></i>
+            <span>{{ partner.rating }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="text-center mt-4" *ngIf="!loading && !error && partners.length === 0">
+    <p>No partners found.</p>
+  </div>
+</div>
+
+
+  

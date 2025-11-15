@@ -1,0 +1,175 @@
+<div class="admin-categories-container">
+  <div class="header">
+    <h2>Categories Management</h2>
+    <button class="btn-primary" (click)="openAddCategoryModal()">+ Add Category</button>
+  </div>
+
+  <div *ngIf="loading" class="loading">Loading categories...</div>
+
+  <div *ngIf="!loading" class="categories-list">
+    <div *ngFor="let category of categories" class="category-card">
+      <div class="category-header">
+        <img [src]="category.imageUrl" [alt]="category.name" class="category-image">
+        <div class="category-info">
+          <h3>{{ category.name }}</h3>
+          <p>{{ category.description }}</p>
+        </div>
+        <div class="category-actions">
+          <button class="btn-secondary" (click)="openAddSubcategoryModal(category)">Add Subcategory</button>
+          <button class="btn-edit" (click)="openEditCategoryModal(category)">Edit</button>
+          <button class="btn-danger" (click)="deleteCategory(category.id)">Delete</button>
+        </div>
+      </div>
+
+      <div *ngIf="category.subcategories && category.subcategories.length > 0" class="subcategories">
+        <h4>Subcategories</h4>
+        <div class="subcategory-list">
+          <div *ngFor="let subcategory of category.subcategories" class="subcategory-item">
+            <img [src]="subcategory.imageUrl" [alt]="subcategory.name" class="subcategory-image">
+            <span>{{ subcategory.name }}</span>
+            <div class="subcategory-actions">
+              <button class="btn-small btn-edit" (click)="openEditSubcategoryModal(category, subcategory)">Edit</button>
+              <button class="btn-small btn-delete" (click)="deleteSubcategory(subcategory.id)">Delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Category Modal -->
+<div *ngIf="showAddModal" class="modal-overlay" (click)="showAddModal = false">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h3>Add New Category</h3>
+    <form (ngSubmit)="saveCategory()">
+      <div class="form-group">
+        <label>Category Name</label>
+        <input type="text" [(ngModel)]="newCategory.name" name="name" required>
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea [(ngModel)]="newCategory.description" name="description" rows="3"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Image</label>
+        <input type="file" (change)="onNewCategoryImageSelect($event)" accept="image/*" class="file-input">
+        <div *ngIf="newCategoryImagePreview" class="image-preview-thumbnail" (click)="openFullScreenImage(newCategoryImagePreview)">
+          <img [src]="newCategoryImagePreview" alt="Preview">
+          <span class="preview-hint">Click to view full size</span>
+        </div>
+        <small>Or enter image URL:</small>
+        <input type="text" [(ngModel)]="newCategory.imageUrl" name="imageUrl" placeholder="https://example.com/image.jpg">
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" (click)="showAddModal = false">Cancel</button>
+        <button type="submit" class="btn-primary" [disabled]="uploadingImage">
+          <span *ngIf="uploadingImage">Uploading...</span>
+          <span *ngIf="!uploadingImage">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Edit Category Modal -->
+<div *ngIf="showEditModal" class="modal-overlay" (click)="showEditModal = false">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h3>Edit Category</h3>
+    <form (ngSubmit)="updateCategory()">
+      <div class="form-group">
+        <label>Category Name</label>
+        <input type="text" [(ngModel)]="editCategory.name" name="editName" required>
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea [(ngModel)]="editCategory.description" name="editDescription" rows="3"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Image</label>
+        <input type="file" (change)="onEditCategoryImageSelect($event)" accept="image/*" class="file-input">
+        <div *ngIf="editCategoryImagePreview" class="image-preview-thumbnail" (click)="openFullScreenImage(editCategoryImagePreview)">
+          <img [src]="editCategoryImagePreview" alt="Preview">
+          <span class="preview-hint">Click to view full size</span>
+        </div>
+        <small>Or enter image URL:</small>
+        <input type="text" [(ngModel)]="editCategory.imageUrl" name="editImageUrl" placeholder="https://example.com/image.jpg">
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" (click)="showEditModal = false">Cancel</button>
+        <button type="submit" class="btn-primary" [disabled]="uploadingImage">
+          <span *ngIf="uploadingImage">Uploading...</span>
+          <span *ngIf="!uploadingImage">Update</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Add Subcategory Modal -->
+<div *ngIf="showAddSubcategoryModal" class="modal-overlay" (click)="showAddSubcategoryModal = false">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h3>Add Subcategory to {{ selectedCategory?.name }}</h3>
+    <form (ngSubmit)="saveSubcategory()">
+      <div class="form-group">
+        <label>Subcategory Name</label>
+        <input type="text" [(ngModel)]="newSubcategory.name" name="subName" required>
+      </div>
+      <div class="form-group">
+        <label>Image</label>
+        <input type="file" (change)="onNewSubcategoryImageSelect($event)" accept="image/*" class="file-input">
+        <div *ngIf="newSubcategoryImagePreview" class="image-preview-thumbnail" (click)="openFullScreenImage(newSubcategoryImagePreview)">
+          <img [src]="newSubcategoryImagePreview" alt="Preview">
+          <span class="preview-hint">Click to view full size</span>
+        </div>
+        <small>Or enter image URL:</small>
+        <input type="text" [(ngModel)]="newSubcategory.imageUrl" name="newSubImageUrl" placeholder="https://example.com/image.jpg">
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" (click)="showAddSubcategoryModal = false">Cancel</button>
+        <button type="submit" class="btn-primary" [disabled]="uploadingImage">
+          <span *ngIf="uploadingImage">Uploading...</span>
+          <span *ngIf="!uploadingImage">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Edit Subcategory Modal -->
+<div *ngIf="showEditSubcategoryModal" class="modal-overlay" (click)="showEditSubcategoryModal = false">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h3>Edit Subcategory</h3>
+    <form (ngSubmit)="updateSubcategory()">
+      <div class="form-group">
+        <label>Subcategory Name</label>
+        <input type="text" [(ngModel)]="editSubcategory.name" name="editSubName" required>
+      </div>
+      <div class="form-group">
+        <label>Image</label>
+        <input type="file" (change)="onEditSubcategoryImageSelect($event)" accept="image/*" class="file-input">
+        <div *ngIf="editSubcategoryImagePreview" class="image-preview-thumbnail" (click)="openFullScreenImage(editSubcategoryImagePreview)">
+          <img [src]="editSubcategoryImagePreview" alt="Preview">
+          <span class="preview-hint">Click to view full size</span>
+        </div>
+        <small>Or enter image URL:</small>
+        <input type="text" [(ngModel)]="editSubcategory.imageUrl" name="editSubImageUrl" placeholder="https://example.com/image.jpg">
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" (click)="showEditSubcategoryModal = false">Cancel</button>
+        <button type="submit" class="btn-primary" [disabled]="uploadingImage">
+          <span *ngIf="uploadingImage">Uploading...</span>
+          <span *ngIf="!uploadingImage">Update</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Full Screen Image Preview Modal -->
+<div *ngIf="showImagePreview" class="fullscreen-overlay" (click)="closeFullScreenImage()">
+  <div class="fullscreen-content">
+    <button class="close-btn" (click)="closeFullScreenImage()">×</button>
+    <img [src]="fullScreenImageUrl" alt="Full size image">
+  </div>
+</div>

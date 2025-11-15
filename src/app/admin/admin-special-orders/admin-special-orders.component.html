@@ -1,0 +1,170 @@
+<div class="admin-special-orders-container">
+  <div class="header">
+    <h2>Special Orders Management</h2>
+    <button class="btn-refresh" (click)="loadSpecialOrders()">
+      <i class="fas fa-sync-alt"></i> Refresh
+    </button>
+  </div>
+
+  <div *ngIf="loading" class="loading">
+    <i class="fas fa-spinner fa-spin"></i> Loading special orders...
+  </div>
+
+  <div *ngIf="!loading && specialOrders.length === 0" class="no-data">
+    <i class="fas fa-inbox"></i>
+    <p>No special orders found</p>
+  </div>
+
+  <div *ngIf="!loading && specialOrders.length > 0" class="orders-table">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Customer</th>
+          <th>Email</th>
+          <th>Description</th>
+          <th>Images</th>
+          <th>Status</th>
+          <th>Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of specialOrders">
+          <td>{{ order.id }}</td>
+          <td>{{ order.userName }}</td>
+          <td>{{ order.userEmail }}</td>
+          <td class="description-cell">
+            {{ order.description.substring(0, 60) }}{{ order.description.length > 60 ? '...' : '' }}
+          </td>
+          <td class="images-cell">
+            <div *ngIf="getImages(order.imageUrls).length > 0" class="image-thumbnails">
+              <img 
+                *ngFor="let img of getImages(order.imageUrls).slice(0, 3)" 
+                [src]="img" 
+                [alt]="'Image'" 
+                class="thumbnail"
+                (click)="openFullScreenImage(img)">
+              <span *ngIf="getImages(order.imageUrls).length > 3" class="more-count">
+                +{{ getImages(order.imageUrls).length - 3 }}
+              </span>
+            </div>
+            <span *ngIf="getImages(order.imageUrls).length === 0" class="no-images">No images</span>
+          </td>
+          <td>
+            <span class="status-badge" [ngClass]="getStatusClass(order.status)">
+              {{ order.status }}
+            </span>
+          </td>
+          <td class="date-cell">{{ formatDate(order.createdAt) }}</td>
+          <td class="actions-cell">
+            <button class="btn-view" (click)="openDetailModal(order)">
+              <i class="fas fa-eye"></i> View
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Detail Modal -->
+<div *ngIf="showDetailModal && selectedOrder" class="modal-overlay" (click)="closeDetailModal()">
+  <div class="modal-content detail-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Special Order Details #{{ selectedOrder.id }}</h3>
+      <button class="close-btn" (click)="closeDetailModal()">×</button>
+    </div>
+
+    <div class="modal-body">
+      <!-- Customer Info -->
+      <div class="info-section">
+        <h4>Customer Information</h4>
+        <div class="info-grid">
+          <div class="info-item">
+            <label>Name:</label>
+            <span>{{ selectedOrder.userName }}</span>
+          </div>
+          <div class="info-item">
+            <label>Email:</label>
+            <span>{{ selectedOrder.userEmail }}</span>
+          </div>
+          <div class="info-item">
+            <label>Order Date:</label>
+            <span>{{ formatDate(selectedOrder.createdAt) }}</span>
+          </div>
+          <div class="info-item">
+            <label>Status:</label>
+            <span class="status-badge" [ngClass]="getStatusClass(selectedOrder.status)">
+              {{ selectedOrder.status }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Order Description -->
+      <div class="info-section">
+        <h4>Order Description</h4>
+        <div class="description-box">
+          {{ selectedOrder.description }}
+        </div>
+      </div>
+
+      <!-- Images -->
+      <div *ngIf="getImages(selectedOrder.imageUrls).length > 0" class="info-section">
+        <h4>Reference Images ({{ getImages(selectedOrder.imageUrls).length }})</h4>
+        <div class="image-gallery">
+          <div *ngFor="let img of getImages(selectedOrder.imageUrls); let i = index" class="gallery-item">
+            <img [src]="img" [alt]="'Reference ' + (i + 1)" (click)="openFullScreenImage(img)">
+            <span class="image-label">Image {{ i + 1 }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Admin Notes -->
+      <div class="info-section">
+        <h4>Admin Notes</h4>
+        <textarea 
+          [(ngModel)]="adminNotes" 
+          placeholder="Add notes about this order..."
+          rows="4"
+          class="admin-notes-input"></textarea>
+      </div>
+
+      <!-- Status Actions -->
+      <div class="status-actions">
+        <button 
+          *ngIf="selectedOrder.status === 'PENDING'"
+          class="btn-action btn-approve" 
+          (click)="updateStatus('APPROVED')">
+          <i class="fas fa-check"></i> Approve
+        </button>
+        <button 
+          *ngIf="selectedOrder.status === 'APPROVED'"
+          class="btn-action btn-complete" 
+          (click)="updateStatus('COMPLETED')">
+          <i class="fas fa-check-double"></i> Mark Complete
+        </button>
+        <button 
+          *ngIf="selectedOrder.status === 'PENDING'"
+          class="btn-action btn-reject" 
+          (click)="updateStatus('REJECTED')">
+          <i class="fas fa-times"></i> Reject
+        </button>
+        <button 
+          class="btn-action btn-delete" 
+          (click)="deleteOrder(selectedOrder.id)">
+          <i class="fas fa-trash"></i> Delete
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Full Screen Image Preview -->
+<div *ngIf="showImagePreview" class="image-preview-modal" (click)="closeFullScreenImage()">
+  <div class="image-preview-content" (click)="$event.stopPropagation()">
+    <button class="preview-close-btn" (click)="closeFullScreenImage()">×</button>
+    <img [src]="fullScreenImageUrl" alt="Full Screen Preview">
+  </div>
+</div>

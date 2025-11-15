@@ -1,0 +1,20 @@
+<div class="zoom-wrapper">
+  <!-- Image container with zoom -->
+  <div
+    class="zoom-container"
+    (mousemove)="onMouseMove($event)"
+    (mouseenter)="onMouseEnter()"
+    (mouseleave)="onMouseLeave()"
+    [class.active]="isZooming && zoomEnabled"
+    [style.background-image]="'url(' + imageSrc + ')'"
+    [style.background-position]="backgroundPos"
+    [style.background-size]="zoomEnabled && isZooming ? (zoom * 100) + '%' : 'cover'"
+  >
+    <img [src]="imageSrc" alt="Zoomable image" />
+  </div>
+
+  <!-- Zoom toggle icon -->
+  <button class="zoom-toggle" (click)="toggleZoom()">
+    🔍
+  </button>
+</div>

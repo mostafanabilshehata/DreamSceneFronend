@@ -1,0 +1,181 @@
+<div class="checkout-container container py-5" style="margin-top: 200px;">
+  <div class="row">
+    <div class="col-lg-8">
+      <h2 class="h3 fw-bold mb-4">
+        <i class="fas fa-credit-card me-2"></i>
+        Checkout
+      </h2>
+
+      <!-- Success Message -->
+      <div class="alert alert-success" *ngIf="orderSubmitted">
+        <i class="fas fa-check-circle me-2"></i>
+        <strong>Order Submitted Successfully!</strong>
+        <p class="mb-0">We will contact you soon via email or phone to confirm your order.</p>
+      </div>
+
+      <!-- Customer Information Form -->
+      <div class="card mb-4" *ngIf="!orderSubmitted">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">
+            <i class="fas fa-user me-2"></i>
+            Customer Information
+          </h5>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="checkoutForm">
+            <!-- Name -->
+            <div class="mb-3">
+              <label for="userName" class="form-label">Full Name *</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="userName" 
+                formControlName="userName"
+                [class.is-invalid]="f['userName'].touched && f['userName'].errors"
+                placeholder="Enter your full name">
+              <div class="invalid-feedback" *ngIf="f['userName'].touched && f['userName'].errors">
+                <span *ngIf="f['userName'].errors['required']">Name is required</span>
+                <span *ngIf="f['userName'].errors['minlength']">Name must be at least 3 characters</span>
+              </div>
+            </div>
+
+            <!-- Email -->
+            <div class="mb-3">
+              <label for="userEmail" class="form-label">Email Address *</label>
+              <input 
+                type="email" 
+                class="form-control" 
+                id="userEmail" 
+                formControlName="userEmail"
+                [class.is-invalid]="f['userEmail'].touched && f['userEmail'].errors"
+                placeholder="your.email@example.com">
+              <div class="invalid-feedback" *ngIf="f['userEmail'].touched && f['userEmail'].errors">
+                <span *ngIf="f['userEmail'].errors['required']">Email is required</span>
+                <span *ngIf="f['userEmail'].errors['email']">Please enter a valid email</span>
+              </div>
+              <small class="text-muted">We'll use this to track your order status</small>
+            </div>
+
+            <!-- Phone -->
+            <div class="mb-3">
+              <label for="userPhone" class="form-label">Phone Number *</label>
+              <input 
+                type="tel" 
+                class="form-control" 
+                id="userPhone" 
+                formControlName="userPhone"
+                [class.is-invalid]="f['userPhone'].touched && f['userPhone'].errors"
+                placeholder="01XXXXXXXXX">
+              <div class="invalid-feedback" *ngIf="f['userPhone'].touched && f['userPhone'].errors">
+                <span *ngIf="f['userPhone'].errors['required']">Phone number is required</span>
+                <span *ngIf="f['userPhone'].errors['pattern']">Please enter a valid phone number (10-15 digits)</span>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Order Summary Sidebar -->
+    <div class="col-lg-4">
+      <div class="card sticky-top" style="top: 20px;">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Order Summary</h5>
+        </div>
+        <div class="card-body">
+          <!-- Order Items -->
+          <div class="order-items mb-3">
+            <div class="order-item mb-3 pb-3 border-bottom" *ngFor="let basketItem of basket.items">
+              <div class="d-flex">
+                <img 
+                  [src]="basketItem.item.imageCover || 'assets/images/placeholder.jpg'" 
+                  [alt]="basketItem.item.name"
+                  class="order-item-img rounded me-3">
+                <div class="flex-grow-1">
+                  <h6 class="mb-1">{{basketItem.item.name}}</h6>
+                  <span class="badge badge-sm" [ngClass]="{
+                    'bg-success': basketItem.type === 'SALE',
+                    'bg-primary': basketItem.type === 'RENT'
+                  }">
+                    {{basketItem.type === 'SALE' ? 'Buy' : 'Rent'}}
+                  </span>
+                  <p class="text-muted small mb-0">
+                    Qty: {{basketItem.quantity}}
+                    <span *ngIf="basketItem.type === 'RENT'"> × {{basketItem.rentDays}} days</span>
+                  </p>
+                  <p class="fw-bold mb-0">
+                    <span *ngIf="basketItem.type === 'SALE'">
+                      {{basketItem.item.salePrice! * basketItem.quantity}} EGP
+                    </span>
+                    <span *ngIf="basketItem.type === 'RENT'">
+                      {{basketItem.item.rentPrice! * basketItem.quantity * basketItem.rentDays!}} EGP
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Totals -->
+          <hr>
+          <div class="d-flex justify-content-between mb-2">
+            <span>Total Items:</span>
+            <strong>{{basket.totalItems}}</strong>
+          </div>
+          <div class="d-flex justify-content-between mb-3">
+            <span class="h5">Total Amount:</span>
+            <strong class="h5 text-success">{{basket.totalAmount}} EGP</strong>
+          </div>
+
+          <!-- Action Buttons -->
+          <button 
+            class="btn btn-success w-100 btn-lg mb-2" 
+            (click)="submitOrder()"
+            [disabled]="submitting || orderSubmitted"
+            *ngIf="!orderSubmitted">
+            <span *ngIf="!submitting">
+              <i class="fas fa-check me-2"></i>
+              Place Order
+            </span>
+            <span *ngIf="submitting">
+              <i class="fas fa-spinner fa-spin me-2"></i>
+              Submitting...
+            </span>
+          </button>
+          
+          <button 
+            class="btn btn-outline-secondary w-100" 
+            (click)="goToBasket()"
+            *ngIf="!orderSubmitted">
+            <i class="fas fa-arrow-left me-2"></i>
+            Back to Basket
+          </button>
+        </div>
+      </div>
+
+      <!-- Order Info -->
+      <div class="card mt-3">
+        <div class="card-body">
+          <h6 class="card-title">
+            <i class="fas fa-info-circle me-2"></i>
+            Order Information
+          </h6>
+          <ul class="list-unstyled small mb-0">
+            <li class="mb-2">
+              <i class="fas fa-check text-success me-2"></i>
+              Your order will be reviewed by our team
+            </li>
+            <li class="mb-2">
+              <i class="fas fa-check text-success me-2"></i>
+              We'll contact you within 24 hours
+            </li>
+            <li class="mb-2">
+              <i class="fas fa-check text-success me-2"></i>
+              Track your order status via email
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

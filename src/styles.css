@@ -1,0 +1,176 @@
+/* You can add global styles to this file, and also import other style files */
+@import "./assets/css/bootstrap.min.css";
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.css";
+@import "primeicons/primeicons.css";
+@import url('https://fonts.googleapis.com/css2?family=Encode+Sans+Expanded:wght@300&family=IBM+Plex+Serif&family=Open+Sans:wght@500&display=swap');
+
+:root {
+    --main-color: #282d51;
+    --bg-color:#f4f4f4;
+    --light-color: #f0f3f2;
+    --shadow:0 1px 2px rgba(0,0,0,.1607843137);
+    --font-family: 'IBM Plex Serif', serif;
+    --rating-color: #ffc908;
+    
+}
+
+body {
+    font-family: var(--font-family) !important;
+    background-color: var(--bg-color) !important;
+    overflow-x: hidden;
+}
+
+/* Global Mobile Responsive Styles */
+@media (max-width: 768px) {
+    body {
+        font-size: 14px;
+    }
+    
+    h1 {
+        font-size: 28px !important;
+    }
+    
+    h2 {
+        font-size: 24px !important;
+    }
+    
+    h3 {
+        font-size: 20px !important;
+    }
+    
+    h4 {
+        font-size: 18px !important;
+    }
+    
+    h5 {
+        font-size: 16px !important;
+    }
+    
+    .container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+}
+
+@media (max-width: 576px) {
+    h1 {
+        font-size: 24px !important;
+    }
+    
+    h2 {
+        font-size: 20px !important;
+    }
+    
+    h3 {
+        font-size: 18px !important;
+    }
+}
+
+.p-accordion .p-accordion-header .p-accordion-header-link{
+    color: black;
+    background-color: transparent;
+    text-decoration: none;
+    text-transform: capitalize;
+    font-weight:200;
+    font-size: small;
+    border:none;
+    
+} 
+
+/* .p-icon{
+    left: auto;
+    right: 1rem;
+    position: absolute;
+} */
+ .shoppingBag .pi{
+     color: #434F98;
+    font-weight: bold;
+}
+
+.rating-color{
+    color:var(--rating-color);
+
+}
+.text-main{
+    color:var(--main-color);
+}
+.cursor-pointer{
+    cursor: pointer;
+}
+.p-carousel .p-carousel-content .p-carousel-prev,
+.p-carousel .p-carousel-content .p-carousel-next {
+    background-color: #282d51 !important;
+    color: #f0f3f2 !important;
+}
+
+/* .p-carousel .p-carousel-content .p-carousel-prev, .p-carousel .p-carousel-content .p-carousel-next :hover {
+    scale: 1.3;
+} */
+
+.p-carousel-indicators{
+    display:none !important;
+}
+
+
+
+.product:hover{
+    box-shadow:var(--shadow) ;
+    /* background-color: #fff; */
+    /* border: solid 1px var(--main-color); */
+}
+.font-sm{
+    font-size: 12px;
+}
+
+
+.productContent .pbtn{
+transition: transform 1s , opacity 1s;
+transform: translateY(100%);
+opacity: 0;
+}
+
+.productContent:hover .pbtn{
+    opacity: 1;
+    transform: translateY(0%);
+}
+
+.bg-main{
+    background-color: var(--main-color);
+}
+
+.btn-quik-view {
+    transition: transform 1s , opacity 1s;
+    position: absolute;
+    top:0px;
+    right:0px;
+    width:65px;
+    height:65px;
+    background-color:var(--main-color);
+    border: none;
+    color: var(--light-color);
+    padding: 5px;
+    text-align: center;
+    font-size: 10px;
+    line-height: 1.2;
+   transition:  translateY(-50%);
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 50%;
+    opacity: 0;
+  }
+  .productContent:hover .btn-quik-view {
+    opacity: 1;
+    transform: translateY(0%);
+}
+
+.productContent  .btn-quik-view:hover{
+scale: 1.1;
+}
+p-sidebar{
+    z-index: 1;
+}
+  

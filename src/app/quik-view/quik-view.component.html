@@ -1,0 +1,48 @@
+  <!-- <div class="d-flex flex-column mt-5" style="background-color:#f4f4f4 ;">
+        <div class="subtitle text-center">
+            <p>rich & refined texture </p>
+            <h3 class="mb-5"><a href="">semi classic</a></h3>
+
+        </div>
+
+        <div class="product px-2 py-2 ">
+            <p-carousel class=" mx-4" [value]="images" [numVisible]="5" [numScroll]="5" [circular]="true"
+                [responsiveOptions]="responsiveOptions">
+                <ng-template let-image pTemplate="item">
+                    <div class=" p-2 mx-2 productContent  position-relative ">
+
+                        
+                         <button class=" bg-main btn-quik-view" (click)="showDialog(image._id); displayPermission(image)" >Quik view</button>
+                       
+                       
+                        <a class="text-decoration-none text-main"  [routerLink]="['/productDetails' , image._id ]">
+                            <img class=" w-100" src={{image.imageCover}} alt="">
+                            <span class=" font-sm ">{{image.category.name}}</span>
+                            <h3 class="h6 fw-bold font-sm ">{{image.title.split(' ').slice(0,2).join(' ')}}</h3>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <span class="text-muted fw-bold font-sm">{{image.price}} EGP</span>
+                                <div>
+                                    <i class="fas fa-star rating-color"></i>
+                                    <span class="text-muted fw-bold font-sm">{{image.ratingsAverage}}</span>
+                                </div>
+                            </div>
+                        </a>
+
+                        <button (click)="addToCart(image._id);" class="pbtn bg-main text-white w-100 my-1 position-absolute">+ Add</button>
+                    </div>
+
+                </ng-template>
+            </p-carousel>
+
+        </div>
+        <p-dialog  [modal]="true" [(visible)]="visible" [style]="{ width: '50rem' }" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
+           <ng-container #container>
+            
+           </ng-container>
+          
+        </p-dialog>
+        <button routerLink="/products" class="btnViewAll align-self-center my-5" type="button ">view all
+            <i class="fa-solid fa-arrow-right "></i>
+        </button>
+
+    </div> -->

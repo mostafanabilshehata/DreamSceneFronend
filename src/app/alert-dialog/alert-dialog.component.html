@@ -1,0 +1,14 @@
+<div *ngIf="alert" class="alert-overlay" (click)="close()">
+  <div class="alert-dialog" [ngClass]="'alert-' + alert.type" (click)="$event.stopPropagation()">
+    <div class="alert-icon">
+      <i class="fas" [ngClass]="getIcon()"></i>
+    </div>
+    <div class="alert-content">
+      <h3 class="alert-title">{{ alert.title }}</h3>
+      <p class="alert-message">{{ alert.message }}</p>
+    </div>
+    <button class="alert-close" (click)="close()">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+</div>

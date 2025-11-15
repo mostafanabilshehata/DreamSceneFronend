@@ -1,0 +1,63 @@
+<div class="admin-home">
+  <div class="header">
+    <h2>Dashboard Overview</h2>
+    <p>Welcome to DreamScene Admin Panel</p>
+  </div>
+
+  <div class="stats-container" *ngIf="!loading">
+    <div class="stat-card categories-card" [routerLink]="['/admin/categories']">
+      <div class="card-icon">
+        <i class="fas fa-th-large"></i>
+      </div>
+      <div class="card-content">
+        <h3>Categories</h3>
+        <div class="stat-number">{{ stats.categories }}</div>
+      </div>
+    </div>
+
+    <div class="stat-card products-card" [routerLink]="['/admin/items']">
+      <div class="card-icon">
+        <i class="fas fa-box"></i>
+      </div>
+      <div class="card-content">
+        <h3>Products</h3>
+        <div class="stat-number">{{ stats.products }}</div>
+      </div>
+    </div>
+
+    <div class="stat-card partners-card" [routerLink]="['/admin/partners']">
+      <div class="card-icon">
+        <i class="fas fa-handshake"></i>
+      </div>
+      <div class="card-content">
+        <h3>Partners</h3>
+        <div class="stat-number">{{ stats.partners }}</div>
+      </div>
+    </div>
+
+    <div class="stat-card orders-card" [routerLink]="['/admin/orders']">
+      <div class="card-icon">
+        <i class="fas fa-shopping-cart"></i>
+      </div>
+      <div class="card-content">
+        <h3>Orders</h3>
+        <div class="stat-number">{{ stats.orders }}</div>
+      </div>
+    </div>
+
+    <div class="stat-card special-orders-card" [routerLink]="['/admin/special-orders']">
+      <div class="card-icon">
+        <i class="fas fa-star"></i>
+      </div>
+      <div class="card-content">
+        <h3>Special Orders</h3>
+        <div class="stat-number">{{ stats.specialOrders }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="loading-container" *ngIf="loading">
+    <div class="spinner"></div>
+    <p>Loading statistics...</p>
+  </div>
+</div>

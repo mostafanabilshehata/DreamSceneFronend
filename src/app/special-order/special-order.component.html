@@ -1,0 +1,111 @@
+<div class="special-order-container">
+  <div class="header-section">
+    <h1>Special Order Request</h1>
+    <p class="subtitle">Have a custom request? Tell us what you need and we'll make it happen!</p>
+  </div>
+
+  <div class="form-container">
+    <form (ngSubmit)="submitOrder()">
+      <!-- User Information -->
+      <div class="section">
+        <h2>Your Information</h2>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="userName">Full Name *</label>
+            <input 
+              type="text" 
+              id="userName"
+              [(ngModel)]="orderRequest.userName" 
+              name="userName" 
+              placeholder="Enter your full name"
+              required>
+          </div>
+
+          <div class="form-group">
+            <label for="userEmail">Email Address *</label>
+            <input 
+              type="email" 
+              id="userEmail"
+              [(ngModel)]="orderRequest.userEmail" 
+              name="userEmail" 
+              placeholder="your.email@example.com"
+              required>
+          </div>
+        </div>
+      </div>
+
+      <!-- Order Description -->
+      <div class="section">
+        <h2>Order Details</h2>
+        <div class="form-group">
+          <label for="description">Describe Your Special Order *</label>
+          <textarea 
+            id="description"
+            [(ngModel)]="orderRequest.description" 
+            name="description" 
+            rows="8"
+            placeholder="Please provide detailed information about your custom order including dimensions, colors, materials, quantity, and any specific requirements..."
+            required></textarea>
+          <small>Be as detailed as possible to help us understand your needs</small>
+        </div>
+      </div>
+
+      <!-- Image Upload -->
+      <div class="section">
+        <h2>Reference Images (Optional)</h2>
+        <p class="help-text">Upload images to help us understand your requirements better (Max 5MB per image)</p>
+        
+        <div class="upload-section">
+          <input 
+            type="file" 
+            #fileInput 
+            (change)="onImagesSelect($event)" 
+            accept="image/*" 
+            multiple
+            style="display: none">
+          
+          <button 
+            type="button" 
+            class="btn-upload" 
+            (click)="fileInput.click()" 
+            [disabled]="uploadingImages || submitting">
+            <i class="fas fa-cloud-upload-alt"></i>
+            {{ imagePreviews.length > 0 ? 'Add More Images' : 'Select Images' }}
+          </button>
+
+          <div *ngIf="uploadingImages" class="uploading-status">
+            <i class="fas fa-spinner fa-spin"></i> Uploading images...
+          </div>
+        </div>
+
+        <!-- Image Previews -->
+        <div *ngIf="imagePreviews.length > 0" class="image-previews">
+          <div *ngFor="let preview of imagePreviews; let i = index" class="image-preview-item">
+            <img [src]="preview" [alt]="'Preview ' + (i + 1)">
+            <button 
+              type="button" 
+              class="btn-remove" 
+              (click)="removeImage(i)"
+              [disabled]="uploadingImages || submitting">
+              <i class="fas fa-times"></i>
+            </button>
+            <span class="image-number">{{ i + 1 }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="submit-section">
+        <button 
+          type="submit" 
+          class="btn-submit" 
+          [disabled]="uploadingImages || submitting">
+          <i *ngIf="!submitting" class="fas fa-paper-plane"></i>
+          <i *ngIf="submitting" class="fas fa-spinner fa-spin"></i>
+          {{ submitting ? 'Submitting...' : 'Submit Special Order' }}
+        </button>
+        <p class="note">We will review your request and contact you within 24-48 hours</p>
+      </div>
+    </form>
+  </div>
+</div>

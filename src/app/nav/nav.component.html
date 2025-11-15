@@ -1,0 +1,128 @@
+<!-- <div class="container-fluid"> -->
+    <div class="container-fluid bg-nav">
+        <nav class="navbar navbar-expand-lg" >
+            <a class="navbar-brand logo-container" href="#">
+                <img class="logo-img" src="../../assets/images/bLogo.png" alt="Dream Scene Logo" width="120">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav m-auto mb-2 mb-lg-0 ">
+                     <li class="nav-item mx-2">
+                        <a class="nav-link"  routerLink="/">home</a>
+                    </li>
+                    <li class="nav-item mx-2" *ngFor="let category of categories">
+                        <a class="nav-link" [routerLink]="['/categories', category.id]">{{ category.name }}</a>
+                    </li>
+                    <li class="nav-item mx-2" *ngIf="loading">
+                        <span class="nav-link">Loading...</span>
+                    </li>
+                </ul>
+
+                <div class="d-flex align-items-center" *ngIf="!isAdminRoute">
+                    <!-- Shopping Basket Icon -->
+                    <a routerLink="/basket" title="Shopping Basket" style="position: relative; display: inline-block; margin: 0 15px; cursor: pointer;">
+                        <i class="fas fa-shopping-cart fa-lg" style="color: #333;"></i>
+                        <span class="badge bg-danger" 
+                              *ngIf="basketItemCount > 0"
+                              style="position: absolute; top: -8px; right: -8px; font-size: 11px; min-width: 20px; height: 20px; line-height: 20px; text-align: center; border-radius: 50%; padding: 0; font-weight: bold; border: 2px solid white;">
+                            {{basketItemCount}}
+                        </span>
+                    </a>
+
+                    <!-- Track Orders Icon -->
+                    <a (click)="openTrackOrderModal()" title="Track Your Orders" style="display: inline-block; margin: 0 15px; cursor: pointer;">
+                        <i class="fas fa-truck fa-lg" style="color: #333;"></i>
+                    </a>
+                </div>
+            </div>
+
+        </nav>
+    </div>
+
+<!-- Track Order Modal -->
+<div *ngIf="showTrackOrderModal" class="modal-overlay" (click)="closeTrackOrderModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <h5 class="modal-title">Track Your Orders</h5>
+            <button type="button" class="btn-close" (click)="closeTrackOrderModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <!-- Step 1: Enter Email or Phone -->
+            <div *ngIf="verificationStep === 'email'">
+                <p class="text-muted mb-4">Enter your email to receive a verification code, or use your mobile number for instant tracking</p>
+                
+                <div class="form-group mb-3">
+                    <label for="trackEmail">Email Address (with verification)</label>
+                    <input 
+                        type="email" 
+                        class="form-control" 
+                        id="trackEmail" 
+                        [(ngModel)]="trackingEmail"
+                        placeholder="Enter your email"
+                        [disabled]="verifying">
+                </div>
+                
+                <p class="text-center text-muted my-2">OR</p>
+                
+                <div class="form-group mb-3">
+                    <label for="trackPhone">Mobile Number (instant tracking)</label>
+                    <input 
+                        type="tel" 
+                        class="form-control" 
+                        id="trackPhone" 
+                        [(ngModel)]="trackingPhone"
+                        placeholder="Enter your mobile number"
+                        [disabled]="verifying">
+                </div>
+            </div>
+            
+            <!-- Step 2: Verify Code -->
+            <div *ngIf="verificationStep === 'code'">
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    We've sent a 6-digit verification code to <strong>{{ trackingEmail }}</strong>
+                </div>
+                
+                <div class="form-group mb-3">
+                    <label for="verificationCode">Verification Code</label>
+                    <input 
+                        type="text" 
+                        class="form-control text-center" 
+                        id="verificationCode" 
+                        [(ngModel)]="verificationCode"
+                        placeholder="000000"
+                        maxlength="6"
+                        [disabled]="verifying"
+                        (keyup.enter)="trackOrder()">
+                    <small class="text-muted">Code expires in 10 minutes</small>
+                </div>
+                
+                <div class="text-center mb-3">
+                    <button type="button" class="btn-link" (click)="resendCode()" [disabled]="verifying">
+                        Didn't receive code? Resend
+                    </button>
+                </div>
+            </div>
+            
+            <div *ngIf="trackingError" class="alert alert-danger">
+                {{ trackingError }}
+            </div>
+            
+            <div *ngIf="verifying" class="text-center text-muted">
+                <i class="fas fa-spinner fa-spin me-2"></i>
+                {{ verificationStep === 'email' ? 'Sending verification code...' : 'Verifying...' }}
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="closeTrackOrderModal()" [disabled]="verifying">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="trackOrder()" [disabled]="verifying">
+                {{ verificationStep === 'email' ? 'Continue' : 'Verify & Track' }}
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- </div> -->
