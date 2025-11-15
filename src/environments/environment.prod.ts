@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://dreamscene-backend.onrender.com/api'
+  apiUrl: 'https://dreamscenebackend-production.up.railway.app/api'
 };
