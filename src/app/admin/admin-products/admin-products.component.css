@@ -259,6 +259,56 @@ tbody tr:hover {
   .form-row {
     grid-template-columns: 1fr;
   }
+
+  .items-table {
+    padding: 10px;
+    overflow-x: auto;
+  }
+
+  table {
+    min-width: 800px;
+  }
+
+  th, td {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+
+  .item-image {
+    width: 40px;
+    height: 40px;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .action-buttons button {
+    width: 100%;
+    font-size: 11px;
+    padding: 6px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .items-table {
+    padding: 5px;
+  }
+
+  table {
+    min-width: 700px;
+  }
+
+  th, td {
+    padding: 6px 8px;
+    font-size: 11px;
+  }
+
+  .item-image {
+    width: 35px;
+    height: 35px;
+  }
 }
 
 /* Image Upload Styles */

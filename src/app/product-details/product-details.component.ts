@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NavComponent } from '../nav/nav.component';
-import { GalleriaModule } from 'primeng/galleria';
 import {Routes,RouterLink, RouterOutlet, ActivatedRoute } from '@angular/router';
 import { NgClass, NgFor, CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
@@ -9,12 +8,11 @@ import { ApiService } from '../services/api.service';
 import { BasketService } from '../services/basket.service';
 import { AlertService } from '../services/alert.service';
 import { Item } from '../models/api.models';
-import { AccordionModule } from 'primeng/accordion';
 
 @Component({
   selector: 'app-product-details',
   standalone: true,
-  imports: [NavComponent,RouterLink, RouterOutlet,HttpClientModule,FormsModule,GalleriaModule,AccordionModule,NgFor,CommonModule],
+  imports: [NavComponent,RouterLink, RouterOutlet,HttpClientModule,FormsModule,NgFor,CommonModule],
   templateUrl: './product-details.component.html',
   styleUrls: ['./product-details.component.css']
 })

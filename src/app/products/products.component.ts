@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NavComponent } from '../nav/nav.component';
 import { CommonModule } from '@angular/common';
-import { ImageModule } from 'primeng/image';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { ProductsService } from '../services/products.service';
@@ -12,7 +11,7 @@ import { CartService } from '../services/cart.service';
 @Component({
   selector: 'app-products',
   standalone: true,
-  imports: [ NavComponent,CommonModule, ImageModule,HttpClientModule ,NgFor,],
+  imports: [ NavComponent, CommonModule, HttpClientModule, NgFor],
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.css']
 })

@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { DialogModule } from 'primeng/dialog';
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-image-zoom',
   standalone: true,
-  imports: [DialogModule],
+  imports: [CommonModule],
   templateUrl: './image-zoom.component.html',
   styleUrl: './image-zoom.component.css'
 })

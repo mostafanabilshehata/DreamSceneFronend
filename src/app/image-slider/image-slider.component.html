@@ -2,21 +2,33 @@
     <div class="subtitle text-center">
         <p>rich & refined texture </p>
         <h3 class="mb-5"><a href="">semi classic</a></h3>
-
     </div> 
-    <!-- <div class=" " > -->
-         <p-carousel class=" mx-4" [value]="images" [numVisible]="5" [numScroll]="5" [circular]="true"
-            [responsiveOptions]="responsiveOptions">
-            <ng-template    let-image pTemplate="item">
-                <div class="imgSlider p-2 mx-2">
-                <img class=" w-100"  src={{image.imageCover}} alt="">
-            </div>
-            </ng-template>
-        </p-carousel> 
-    <!-- </div> -->
     
-     <button class="btnViewAll align-self-center my-5" type="button ">view all
-        <i class="fa-solid fa-arrow-right "></i>
+    <!-- Bootstrap Carousel -->
+    <div id="imageCarousel" class="carousel slide mx-4" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        <div *ngFor="let image of images; let i = index" 
+             class="carousel-item" 
+             [class.active]="i === 0">
+          <div class="d-flex justify-content-center">
+            <div class="imgSlider p-2 mx-2">
+              <img class="w-100" [src]="image.imageCover" alt="">
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#imageCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#imageCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+    
+     <button class="btnViewAll align-self-center my-5" type="button">view all
+        <i class="fa-solid fa-arrow-right"></i>
     </button>
 
 </div> 

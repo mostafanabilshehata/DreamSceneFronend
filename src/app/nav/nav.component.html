@@ -16,6 +16,9 @@
                     <li class="nav-item mx-2" *ngFor="let category of categories">
                         <a class="nav-link" [routerLink]="['/categories', category.id]">{{ category.name }}</a>
                     </li>
+                    <li class="nav-item mx-2">
+                        <a class="nav-link" routerLink="/special-order">Customize Your Order</a>
+                    </li>
                     <li class="nav-item mx-2" *ngIf="loading">
                         <span class="nav-link">Loading...</span>
                     </li>

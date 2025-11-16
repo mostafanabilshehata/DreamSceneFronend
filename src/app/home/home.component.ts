@@ -1,11 +1,6 @@
 import { Component, OnInit,HostListener, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { CarouselModule } from 'primeng/carousel';
-import { CardModule } from 'primeng/card';
-import { ButtonModule } from 'primeng/button';
-import { DialogModule } from 'primeng/dialog';
-import { DividerModule } from 'primeng/divider';
 import { HttpClientModule } from '@angular/common/http';
 import { ProductsService } from '../services/products.service';
 import { CartService } from '../services/cart.service';
@@ -19,12 +14,7 @@ import { AnimateOnScrollDirective } from '../animate-on-scroll.directive';
   imports: [
     CommonModule,
     AnimateOnScrollDirective,
-    ButtonModule,
     RouterLink,
-    CarouselModule,
-    CardModule,
-    DialogModule,
-    DividerModule,
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],

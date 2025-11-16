@@ -1,18 +1,35 @@
 <div class="container product-details-container">
 <div class="row align-items-center justify-content-between m-auto">
-<div class="col-md-6  " >
+<div class="col-md-6">
       
-          <p-galleria  [value]="imageDetails"  [responsiveOptions]="responsiveOptions" [containerStyle]="{'max-width': '660px'}" [numVisible]="5"> 
-            <ng-template pTemplate="item" let-item>
-                <img [src]="item.itemImageSrc" style="width: 100%;  display: block;" [alt]="item.alt" />
-            </ng-template>
-            
-            <ng-template   pTemplate="thumbnail" let-item >
-                <div  class=" justify-content-center" >
-                    <img   [src]="item.thumbnailImageSrc" style="width:100%;" [alt]="item.alt" />
-                </div>
-            </ng-template>        
-        </p-galleria>
+          <!-- Bootstrap Carousel -->
+          <div id="productGallery" class="carousel slide" data-bs-ride="carousel" style="max-width: 660px;">
+            <div class="carousel-inner">
+              <div *ngFor="let item of imageDetails; let i = index" 
+                   class="carousel-item" 
+                   [class.active]="i === 0">
+                <img [src]="item.itemImageSrc" class="d-block w-100" [alt]="item.alt" style="width: 100%; display: block;">
+              </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#productGallery" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#productGallery" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+            <!-- Thumbnails -->
+            <div class="d-flex justify-content-center mt-2 flex-wrap">
+              <div *ngFor="let item of imageDetails; let i = index" class="p-1">
+                <img [src]="item.thumbnailImageSrc" [alt]="item.alt" 
+                     style="width: 80px; cursor: pointer;" 
+                     class="img-thumbnail"
+                     data-bs-target="#productGallery" 
+                     [attr.data-bs-slide-to]="i">
+              </div>
+            </div>
+          </div>
 
 <!-- Fallback if no images -->
 <img class="w-100" *ngIf="!imageDetails || imageDetails.length === 0" [src]="itemDetails?.imageCover || 'assets/images/placeholder.jpg'" alt="{{itemDetails?.name}}">
@@ -131,13 +148,30 @@
     </div>
 </div>
 
-<div class="card flex justify-center mt-3">
+<div class="card mt-3">
     
-    <p-accordion >
-        <p-accordionTab header="Description">
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Doloribus unde eius similique, eum eligendi praesentium sint, quia illum quae error cupiditate est tempora! Recusandae modi eligendi dolor ipsam quam id?
-        </p-accordionTab>
-        <p-accordionTab header="size chart">
+    <!-- Bootstrap Accordion -->
+    <div class="accordion" id="productAccordion">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingDescription">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDescription" aria-expanded="true" aria-controls="collapseDescription">
+                    Description
+                </button>
+            </h2>
+            <div id="collapseDescription" class="accordion-collapse collapse show" aria-labelledby="headingDescription" data-bs-parent="#productAccordion">
+                <div class="accordion-body">
+                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Doloribus unde eius similique, eum eligendi praesentium sint, quia illum quae error cupiditate est tempora! Recusandae modi eligendi dolor ipsam quam id?
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingSizeChart">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSizeChart" aria-expanded="false" aria-controls="collapseSizeChart">
+                    Size Chart
+                </button>
+            </h2>
+            <div id="collapseSizeChart" class="accordion-collapse collapse" aria-labelledby="headingSizeChart" data-bs-parent="#productAccordion">
+                <div class="accordion-body">
             <table border="1" cellpadding="10" cellspacing="0">
                 <thead>
                   <tr>
@@ -179,13 +213,23 @@
                     <td>44-46</td>
                   </tr>
                 </tbody>
-              </table> 
-              
-        </p-accordionTab>
-        <p-accordionTab header="store location">
-            Content 2
-          </p-accordionTab>
-      </p-accordion>
+              </table>
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingStore">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseStore" aria-expanded="false" aria-controls="collapseStore">
+                    Store Location
+                </button>
+            </h2>
+            <div id="collapseStore" class="accordion-collapse collapse" aria-labelledby="headingStore" data-bs-parent="#productAccordion">
+                <div class="accordion-body">
+                    Content 2
+                </div>
+            </div>
+        </div>
+    </div>
  </div>
 </div>
 </div>

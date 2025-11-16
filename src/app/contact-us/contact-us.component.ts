@@ -1,15 +1,12 @@
 import { Component,HostListener, OnInit } from '@angular/core';
-import { ButtonModule } from 'primeng/button';
-// import { NavComponent } from '../nav/nav.component';
-import { NgClass } from '@angular/common';
-
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-contact-us',
   templateUrl: './contact-us.component.html',
   styleUrls: ['./contact-us.component.css'],
   standalone: true,
-  imports: [ButtonModule,NgClass]
+  imports: [CommonModule]
 })
 export class ContactUsComponent implements OnInit {
   scrolled: boolean = false;

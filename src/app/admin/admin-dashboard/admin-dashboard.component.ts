@@ -13,6 +13,7 @@ import { forkJoin } from 'rxjs';
 })
 export class AdminDashboardComponent implements OnInit {
   adminName: string = 'Admin';
+  sidebarOpen: boolean = false;
   
   stats = {
     totalCategories: 0,
@@ -52,5 +53,15 @@ export class AdminDashboardComponent implements OnInit {
         console.error('Error loading stats:', err);
       }
     });
+  }
+
+  toggleSidebar(): void {
+    this.sidebarOpen = !this.sidebarOpen;
+  }
+
+  closeSidebarOnMobile(): void {
+    if (window.innerWidth <= 991) {
+      this.sidebarOpen = false;
+    }
   }
 }

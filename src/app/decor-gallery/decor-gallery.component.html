@@ -5,7 +5,7 @@
   
     <div class="masonry">
       <div class="masonry-item" *ngFor="let img of images">
-        <p-image [src]="img.src" [alt]="img.alt" preview></p-image>
+        <img [src]="img.src" [alt]="img.alt" class="img-fluid" data-bs-toggle="modal" data-bs-target="#imageModal" style="cursor: pointer;">
       </div>
     </div>
   </section>

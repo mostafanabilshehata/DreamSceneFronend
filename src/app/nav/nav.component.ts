@@ -1,11 +1,12 @@
-import { Component, HostListener, OnInit } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Component, HostListener, OnInit, Renderer2 } from '@angular/core';
+import { Router, RouterLink, NavigationEnd } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { BasketService } from '../services/basket.service';
 import { CategoryService } from '../services/category.service';
 import { ApiService } from '../services/api.service';
 import { AlertService } from '../services/alert.service';
 import { NgFor, CommonModule } from '@angular/common';
+import { filter } from 'rxjs/operators';
 import { Category } from '../models/api.models';
 
 @Component({
@@ -52,8 +53,16 @@ export class NavComponent implements OnInit {
     private basketService: BasketService,
     private router: Router,
     private apiService: ApiService,
-    private alertService: AlertService
-  ) { }
+    private alertService: AlertService,
+    private renderer: Renderer2
+  ) {
+    // Close navbar on route change
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      this.closeNavbar();
+    });
+  }
 
   ngOnInit() {
     // Check if current route is admin route
@@ -77,6 +86,20 @@ export class NavComponent implements OnInit {
       error: (error) => {
         console.error('Error loading categories:', error);
         this.loading = false;
+      }
+    });
+
+    // Close navbar when clicking outside
+    this.renderer.listen('document', 'click', (event: Event) => {
+      const navbar = document.getElementById('navbarNav');
+      const toggler = document.querySelector('.navbar-toggler');
+      
+      if (navbar && toggler) {
+        const clickedInside = navbar.contains(event.target as Node) || toggler.contains(event.target as Node);
+        
+        if (!clickedInside && navbar.classList.contains('show')) {
+          this.closeNavbar();
+        }
       }
     });
   }
@@ -189,5 +212,17 @@ export class NavComponent implements OnInit {
     this.codeSent = false;
     this.verificationCode = '';
     this.sendVerificationCode();
+  }
+
+  // Helper method to close navbar
+  closeNavbar(): void {
+    const navbar = document.getElementById('navbarNav');
+    const toggler = document.querySelector('.navbar-toggler');
+    
+    if (navbar?.classList.contains('show')) {
+      navbar.classList.remove('show');
+      toggler?.classList.add('collapsed');
+      toggler?.setAttribute('aria-expanded', 'false');
+    }
   }
 }

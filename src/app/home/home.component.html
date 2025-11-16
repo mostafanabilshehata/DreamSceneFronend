@@ -1,35 +1,39 @@
 <!-- Navigation handled by app component -->
-<div class="position-relative">
-  <!-- Hero Slider (background layer) -->
-  <div class="vh-100 hero-slider-wrapper ">
-      <p-carousel
-          [value]="heroImages"
-          [numVisible]="1"
-          [numScroll]="1"
-          [circular]="true"
-          [autoplayInterval]="4000"
-          [showIndicators]="true"
-          [showNavigators]="false"
-          styleClass="hero-slider">
-          <ng-template pTemplate="item" let-img>
-              <div class="hero-slide">
-                  <img [src]="img.src" [alt]="img.alt" class="hero-slide-img" />
-              </div>
-          </ng-template>
-      </p-carousel>
-  </div>
+<div class="hero-slider-wrapper">
+  <!-- Hero Slider (background layer) - Bootstrap Carousel -->
+  <div id="heroCarousel" class="carousel slide carousel-fade h-100" data-bs-ride="carousel" data-bs-interval="4000">
+      <div class="carousel-indicators">
+        <button *ngFor="let img of heroImages; let i = index" 
+                type="button" 
+                [attr.data-bs-target]="'#heroCarousel'" 
+                [attr.data-bs-slide-to]="i" 
+                [class.active]="i === 0" 
+                [attr.aria-current]="i === 0 ? 'true' : null"
+                [attr.aria-label]="'Slide ' + (i + 1)">
+        </button>
+      </div>
+      <div class="carousel-inner h-100">
+        <div *ngFor="let img of heroImages; let i = index" 
+             class="carousel-item h-100" 
+             [class.active]="i === 0">
+          <div class="hero-slide">
+            <img [src]="img.src" [alt]="img.alt" class="hero-slide-img d-block w-100" />
+          </div>
+        </div>
+      </div>
+    </div>
 
-  <div class="bg-overLay fontStyle d-flex flex-column">
-
-   
-
-      <div class="headerContent mt-auto ms-4 p-4 ">
+  <!-- Text overlay positioned absolutely over the slider -->
+  <div class="bg-overLay fontStyle">
+      <div class="headerContent ms-4 p-4">
           <h1 class="text-capitalize text-light text-white animate__delay-2s"
               appAnimateOnScroll="animate__lightSpeedInLeft">
               Our services : Rent . Sale . Execution</h1>
+          <a routerLink="/special-order" class="custom-order-link">
+              <i class="fas fa-star"></i> Customize Your Order
+          </a>
       </div>
   </div>
-
 </div>
 <!-- Partners Section -->
 <section class="partners-section">
@@ -74,7 +78,7 @@
   <div class="text-center">
     <button class="view-more-btn" type="button" routerLink="/partners">
         View All Partners
-        <i class="pi pi-arrow-right"></i>
+        <i class="fas fa-arrow-right"></i>
     </button>
   </div>
   </div>

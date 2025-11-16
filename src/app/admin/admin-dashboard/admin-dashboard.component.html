@@ -1,9 +1,17 @@
 <div class="admin-dashboard">
-  <div class="sidebar">
+  <!-- Mobile menu toggle -->
+  <button class="mobile-menu-toggle" (click)="toggleSidebar()">
+    <i class="fas" [ngClass]="sidebarOpen ? 'fa-times' : 'fa-bars'"></i>
+  </button>
+
+  <!-- Overlay for mobile -->
+  <div class="sidebar-overlay" *ngIf="sidebarOpen" (click)="toggleSidebar()"></div>
+
+  <div class="sidebar" [class.open]="sidebarOpen">
     <div class="logo">
       <h2>DreamScene Admin</h2>
     </div>
-    <nav class="sidebar-nav">
+    <nav class="sidebar-nav" (click)="closeSidebarOnMobile()">
       <a routerLink="/admin/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
         <i class="fas fa-home"></i> Dashboard
       </a>
@@ -35,30 +43,6 @@
 
     <div class="content-area">
       <router-outlet></router-outlet>
-      
-      <!-- Default Dashboard View -->
-      <div class="dashboard-stats">
-        <div class="stat-card">
-          <i class="fas fa-list"></i>
-          <h3>{{ stats.totalCategories }}</h3>
-          <p>Categories</p>
-        </div>
-        <div class="stat-card">
-          <i class="fas fa-box"></i>
-          <h3>{{ stats.totalItems }}</h3>
-          <p>Items</p>
-        </div>
-        <div class="stat-card">
-          <i class="fas fa-handshake"></i>
-          <h3>{{ stats.totalPartners }}</h3>
-          <p>Partners</p>
-        </div>
-        <div class="stat-card">
-          <i class="fas fa-shopping-cart"></i>
-          <h3>{{ stats.totalOrders }}</h3>
-          <p>Orders</p>
-        </div>
-      </div>
     </div>
   </div>
 </div>

@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ImageModule } from 'primeng/image';
 @Component({
   selector: 'app-decor-gallery',
   standalone: true,
-  imports: [CommonModule, ImageModule],
+  imports: [CommonModule],
   templateUrl: './decor-gallery.component.html',
   styleUrl: './decor-gallery.component.css'
 })

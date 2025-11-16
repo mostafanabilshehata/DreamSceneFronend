@@ -1,6 +1,6 @@
 <div class="special-order-container">
   <div class="header-section">
-    <h1>Special Order Request</h1>
+    <h1>Customize Your Order</h1>
     <p class="subtitle">Have a custom request? Tell us what you need and we'll make it happen!</p>
   </div>
 
@@ -38,7 +38,7 @@
       <div class="section">
         <h2>Order Details</h2>
         <div class="form-group">
-          <label for="description">Describe Your Special Order *</label>
+          <label for="description">Describe Your Custom Order *</label>
           <textarea 
             id="description"
             [(ngModel)]="orderRequest.description" 
@@ -102,7 +102,7 @@
           [disabled]="uploadingImages || submitting">
           <i *ngIf="!submitting" class="fas fa-paper-plane"></i>
           <i *ngIf="submitting" class="fas fa-spinner fa-spin"></i>
-          {{ submitting ? 'Submitting...' : 'Submit Special Order' }}
+          {{ submitting ? 'Submitting...' : 'Submit Custom Order' }}
         </button>
         <p class="note">We will review your request and contact you within 24-48 hours</p>
       </div>

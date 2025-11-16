@@ -1,17 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { CarouselModule } from 'primeng/carousel';
+import { CommonModule } from '@angular/common';
 import { GetImagesService } from '../services/get-images.service';
 import { HttpClientModule } from '@angular/common/http';
 @Component({
   selector: 'app-image-slider',
   standalone: true,
-  imports: [CarouselModule,HttpClientModule],
+  imports: [CommonModule, HttpClientModule],
   templateUrl: './image-slider.component.html',
   styleUrls: ['./image-slider.component.css']
 })
 export class ImageSliderComponent implements OnInit {
   responsiveOptions:any=[]
- images:[]=[];
+  images:any[]=[];
   constructor(private _getImagesServices:GetImagesService) { }
 
   ngOnInit(): void {

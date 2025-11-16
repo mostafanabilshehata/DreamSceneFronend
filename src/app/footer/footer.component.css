@@ -164,7 +164,12 @@
 /* Responsive Design */
 @media (max-width: 768px) {
     .wave-footer {
-        padding: 3rem 0 1.5rem;
+        padding: 5rem 0 1.5rem;
+    }
+
+    .wave-footer::before {
+        height: 100px;
+        background-size: 100% 100px;
     }
 
     .wave-footer .footer-content {
@@ -189,6 +194,10 @@
         text-align: center;
     }
 
+    .footer-contact-list li {
+        justify-content: center;
+    }
+
     .footer-links-list li, .footer-contact-list li {
         font-size: 13px;
     }
@@ -209,6 +218,15 @@
 }
 
 @media (max-width: 480px) {
+    .wave-footer {
+        padding: 6rem 0 1.5rem;
+    }
+
+    .wave-footer::before {
+        height: 80px;
+        background-size: 100% 80px;
+    }
+
     .footer-heading {
         font-size: 1rem;
     }

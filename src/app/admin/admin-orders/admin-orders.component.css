@@ -383,4 +383,44 @@ tbody tr:hover {
   .info-grid {
     grid-template-columns: 1fr;
   }
+
+  .orders-table {
+    padding: 10px;
+    overflow-x: auto;
+  }
+
+  table {
+    min-width: 900px;
+  }
+
+  th, td {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .action-buttons button {
+    width: 100%;
+    font-size: 11px;
+    padding: 6px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .orders-table {
+    padding: 5px;
+  }
+
+  table {
+    min-width: 800px;
+  }
+
+  th, td {
+    padding: 6px 8px;
+    font-size: 11px;
+  }
 }
