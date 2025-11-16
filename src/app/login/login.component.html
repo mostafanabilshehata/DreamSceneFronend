@@ -1,29 +1,75 @@
 <div class="login-container">
-    <div class="w-75 mx-auto py-4">
-        <h4>Login Now : </h4>
-        <div *ngIf="apiErorr" class="alert alert-danger">{{apiErorr}}</div>
+    <div class="login-wrapper">
+        <div class="login-card">
+            <!-- Header -->
+            <div class="login-header">
+                <h2>Welcome Back</h2>
+                <p class="subtitle">Sign in to access your admin panel</p>
+            </div>
 
-        <form (ngSubmit)="handelLogin(loginForm)" [formGroup]="loginForm">
+            <!-- Error Message -->
+            <div *ngIf="apiErorr" class="error-message">
+                <i class="fas fa-exclamation-circle"></i>
+                <span>{{apiErorr}}</span>
+            </div>
 
-        
-        <label for="username">Username:</label>
-        <input formControlName="username" type="text" class="form-control  mb-2" id="username" />
-        <div *ngIf="loginForm.get('username')?.errors && loginForm.get('username')?.touched" class="alert alert-danger">
-            <p *ngIf="loginForm.get('username')?.getError('required')" class="m-0">Username is required</p>
-        </div>        <label for="password">Password:</label>
-        <input formControlName="password" type="password" class="form-control  mb-2" id="password" />
-        <div *ngIf="loginForm.get('password')?.errors && loginForm.get('password')?.touched"
-            class="alert alert-danger">
-            <p *ngIf="loginForm.get('password')?.getError('minlength')" class="m-0">Password must be at least 3 characters</p>
-            <p *ngIf="loginForm.get('password')?.getError('required')" class="m-0">password is required</p>
+            <!-- Login Form -->
+            <form (ngSubmit)="handelLogin(loginForm)" [formGroup]="loginForm" class="login-form">
+                
+                <div class="form-group">
+                    <label for="username">
+                        <i class="fas fa-user"></i>
+                        Username
+                    </label>
+                    <input 
+                        formControlName="username" 
+                        type="text" 
+                        class="form-input" 
+                        id="username"
+                        placeholder="Enter your username" />
+                    <div *ngIf="loginForm.get('username')?.errors && loginForm.get('username')?.touched" class="field-error">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span *ngIf="loginForm.get('username')?.getError('required')">Username is required</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">
+                        <i class="fas fa-lock"></i>
+                        Password
+                    </label>
+                    <input 
+                        formControlName="password" 
+                        type="password" 
+                        class="form-input" 
+                        id="password"
+                        placeholder="Enter your password" />
+                    <div *ngIf="loginForm.get('password')?.errors && loginForm.get('password')?.touched" class="field-error">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span *ngIf="loginForm.get('password')?.getError('minlength')">Password must be at least 3 characters</span>
+                        <span *ngIf="loginForm.get('password')?.getError('required')">Password is required</span>
+                    </div>
+                </div>
+
+                <button 
+                    [disabled]="loginForm.invalid || isLoading" 
+                    type="submit"
+                    class="btn-login">
+                    <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i>
+                    <span *ngIf="!isLoading">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Sign In
+                    </span>
+                </button>
+            </form>
+
+            <!-- Footer -->
+            <div class="login-footer">
+                <p>
+                    <i class="fas fa-shield-alt"></i>
+                    Secure Admin Access
+                </p>
+            </div>
         </div>
-
-       
-        <button [disabled]="loginForm.invalid" type="submit"
-            class="btn d-block ms-auto btnLogin">
-            <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i>
-            <span *ngIf="!isLoading">Login</span>
-        </button>
-    </form>
     </div>
 </div>
