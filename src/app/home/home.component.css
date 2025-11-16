@@ -22,12 +22,23 @@
 /* Mobile responsive overlay */
 @media (max-width: 768px) {
   .hero-slider-wrapper {
-    height: 100vh;
-    min-height: 500px;
+    height: 70vh;
+    min-height: 450px;
   }
   
   .bg-overLay {
-    height: 100vh;
+    height: 55vh;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-slider-wrapper {
+    height: 50vh;
+    min-height: 350px;
+  }
+  
+  .bg-overLay {
+    height: 50vh;
   }
 }
 
@@ -133,10 +144,30 @@
     font-size: 18px;
   }
   
-  /* Carousel indicators smaller on mobile */
+  .headerContent {
+    padding-bottom: 60px !important;
+  }
+
+  .custom-order-link {
+    margin-bottom: 15px;
+  }
+
+  /* Carousel indicators below customize button on mobile */
+  .carousel-indicators {
+    bottom: 10px;
+    top: auto;
+    margin: 0;
+    z-index: 2;
+  }
+
   .carousel-indicators button {
     width: 8px;
     height: 8px;
+    background-color: rgba(255, 255, 255, 0.7);
+  }
+
+  .carousel-indicators .active {
+    background-color: #d4af37;
   }
 }
 
@@ -149,15 +180,29 @@
     font-size: 14px;
   }
 
+  .headerContent {
+    padding-bottom: 50px !important;
+  }
+
   .custom-order-link {
     font-size: 14px;
     padding: 8px 20px;
     gap: 8px;
-    margin-top: 15px;
+    margin-top: 10px;
+    margin-bottom: 10px;
   }
 
   .custom-order-link i {
     font-size: 16px;
+  }
+
+  .carousel-indicators {
+    bottom: 5px;
+  }
+
+  .carousel-indicators button {
+    width: 6px;
+    height: 6px;
   }
 }
 
