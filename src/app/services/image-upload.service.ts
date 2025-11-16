@@ -1,7 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
+
+interface ApiResponse<T> {
+  success: boolean;
+  message: string;
+  data: T;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +28,10 @@ export class ImageUploadService {
       'Authorization': `Bearer ${token}`
     });
     
-    return this.http.post<{ imageUrl: string }>(`${this.apiUrl}/admin/upload-image`, formData, { headers });
+    return this.http.post<ApiResponse<string>>(`${this.apiUrl}/admin/upload-image`, formData, { headers })
+      .pipe(
+        map(response => ({ imageUrl: response.data }))
+      );
   }
   
   // Handle image file selection and preview
