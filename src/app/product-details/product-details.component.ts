@@ -72,7 +72,11 @@ export class ProductDetailsComponent implements OnInit {
       next: (item: Item) => {
         this.itemDetails = item;
         if (item.images && item.images.length > 0) {
-          this.imageDetails = item.images.map((img: any) => ({
+          // Remove duplicates by filtering unique image URLs
+          const uniqueImages = item.images.filter((img: any, index: number, self: any[]) => 
+            index === self.findIndex((t: any) => t.imageUrl === img.imageUrl)
+          );
+          this.imageDetails = uniqueImages.map((img: any) => ({
             itemImageSrc: img.imageUrl,
             thumbnailImageSrc: img.imageUrl,
             alt: item.name

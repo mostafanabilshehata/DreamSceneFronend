@@ -13,7 +13,7 @@
 
 /* Product Details Container */
 .product-details-container {
-    padding-top: 120px;
+    padding-top: 100px;
     padding-bottom: 40px;
 }
 
@@ -73,7 +73,7 @@
 /* Mobile Responsive Styles */
 @media (max-width: 768px) {
     .product-details-container {
-        padding-top: 80px;
+        padding-top: 90px;
         padding-bottom: 20px;
     }
     
@@ -101,7 +101,7 @@
 
 @media (max-width: 480px) {
     .product-details-container {
-        padding-top: 60px;
+        padding-top: 80px;
     }
     
     .pbtn {

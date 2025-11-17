@@ -20,19 +20,16 @@
               <span class="visually-hidden">Next</span>
             </button>
             <!-- Thumbnails -->
-            <div class="d-flex justify-content-center mt-2 flex-wrap">
+            <div class="d-flex justify-content-center mt-2 flex-wrap" *ngIf="imageDetails.length > 1">
               <div *ngFor="let item of imageDetails; let i = index" class="p-1">
                 <img [src]="item.thumbnailImageSrc" [alt]="item.alt" 
-                     style="width: 80px; cursor: pointer;" 
+                     style="width: 80px; height: 80px; object-fit: cover; cursor: pointer;" 
                      class="img-thumbnail"
                      data-bs-target="#productGallery" 
                      [attr.data-bs-slide-to]="i">
               </div>
             </div>
           </div>
-
-<!-- Fallback if no images -->
-<img class="w-100" *ngIf="!imageDetails || imageDetails.length === 0" [src]="itemDetails?.imageCover || 'assets/images/placeholder.jpg'" alt="{{itemDetails?.name}}">
 </div>
 <div class="col-md-6">
 <h3 class="h4 fw-bolder mb-2">{{itemDetails?.name}}</h3>
