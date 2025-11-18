@@ -54,6 +54,63 @@ heroImages = [
 
   ngOnInit() {
     this.loadPartners();
+    this.initializeCarousel();
+  }
+
+  initializeCarousel(): void {
+    // Initialize Bootstrap carousel after view loads
+    setTimeout(() => {
+      const carouselElement = document.getElementById('heroCarousel');
+      if (carouselElement) {
+        // Ensure Bootstrap is loaded
+        if (typeof (window as any).bootstrap !== 'undefined') {
+          const carousel = new (window as any).bootstrap.Carousel(carouselElement, {
+            interval: 4000,
+            ride: 'carousel',
+            touch: true,
+            wrap: true,
+            pause: false
+          });
+          carousel.cycle(); // Start cycling immediately
+        } else {
+          // Fallback: manually enable touch events
+          this.enableTouchSwipe(carouselElement);
+        }
+      }
+    }, 100);
+  }
+
+  enableTouchSwipe(element: HTMLElement): void {
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    element.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    element.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      this.handleSwipe(touchStartX, touchEndX);
+    }, { passive: true });
+  }
+
+  handleSwipe(startX: number, endX: number): void {
+    const swipeThreshold = 50; // minimum distance for swipe
+    const diff = startX - endX;
+
+    if (Math.abs(diff) > swipeThreshold) {
+      const carouselElement = document.getElementById('heroCarousel');
+      if (carouselElement && typeof (window as any).bootstrap !== 'undefined') {
+        const carousel = (window as any).bootstrap.Carousel.getInstance(carouselElement);
+        if (carousel) {
+          if (diff > 0) {
+            carousel.next(); // Swipe left - next slide
+          } else {
+            carousel.prev(); // Swipe right - previous slide
+          }
+        }
+      }
+    }
   }
 
   loadPartners(): void {
