@@ -128,6 +128,8 @@ heroImages = [
           // Set initial active index to middle card if there are at least 3 cards
           this.activeIndex = this.cards.length >= 3 ? Math.floor(this.cards.length / 2) : 0;
           this.startAutoSlide();
+          // Enable touch swipe for partners
+          this.enablePartnersSwipe();
         } else {
           this.activeIndex = 0;
         }
@@ -139,6 +141,38 @@ heroImages = [
         this.cards = [];
       }
     });
+  }
+
+  enablePartnersSwipe(): void {
+    setTimeout(() => {
+      const partnersContainer = document.querySelector('.card-container') as HTMLElement;
+      if (partnersContainer) {
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        partnersContainer.addEventListener('touchstart', (e) => {
+          touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        partnersContainer.addEventListener('touchend', (e) => {
+          touchEndX = e.changedTouches[0].screenX;
+          this.handlePartnersSwipe(touchStartX, touchEndX);
+        }, { passive: true });
+      }
+    }, 200);
+  }
+
+  handlePartnersSwipe(startX: number, endX: number): void {
+    const swipeThreshold = 50;
+    const diff = startX - endX;
+
+    if (Math.abs(diff) > swipeThreshold) {
+      if (diff > 0) {
+        this.next(); // Swipe left - next partner
+      } else {
+        this.prev(); // Swipe right - previous partner
+      }
+    }
   }
 
   formatGradient(gradient: string): string {
