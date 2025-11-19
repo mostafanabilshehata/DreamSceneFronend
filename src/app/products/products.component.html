@@ -40,16 +40,23 @@
                         </div>
                     </div>
 
+                    <!-- Stock Status -->
+                    <div *ngIf="isOutOfStock(product)" class="alert alert-danger text-center p-2 mb-2">
+                        <i class="fas fa-exclamation-triangle"></i> Out of Stock
+                    </div>
+
                     <!-- Dynamic Sale/Rent Buttons -->
                     <div class="button-group">
                         <button *ngIf="canSale(product)" 
                                 class="btn btn-sale w-100 my-1" 
-                                (click)="addToCart(product._id, 'sale')">
+                                (click)="addToCart(product._id, 'sale')"
+                                [disabled]="isOutOfStock(product)">
                             Add to Cart (Sale)
                         </button>
                         <button *ngIf="canRent(product)" 
                                 class="btn btn-rent w-100 my-1" 
-                                (click)="addToCart(product._id, 'rent')">
+                                (click)="addToCart(product._id, 'rent')"
+                                [disabled]="isOutOfStock(product)">
                             Add to Cart (Rent)
                         </button>
                     </div>

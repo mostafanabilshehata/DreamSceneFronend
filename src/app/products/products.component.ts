@@ -61,6 +61,12 @@ export class ProductsComponent implements OnInit {
   }
 
   addToCart(productId: string, type: 'sale' | 'rent'): void {
+    const product = this.products.find(p => p._id === productId);
+    if (product && product.stockQuantity === 0) {
+      alert('This item is out of stock');
+      return;
+    }
+    
     this._CartService.addToCart(productId, type).subscribe({
       next: (response) => {
         console.log('Added to cart:', response);
@@ -76,5 +82,9 @@ export class ProductsComponent implements OnInit {
 
   canRent(product: Product): boolean {
     return product.availability === 'rent' || product.availability === 'both';
+  }
+
+  isOutOfStock(product: Product): boolean {
+    return product.stockQuantity === 0;
   }
 }

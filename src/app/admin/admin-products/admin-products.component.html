@@ -109,13 +109,13 @@
       </div>
 
       <div class="form-row">
-        <div class="form-group">
-          <label>Sale Price</label>
-          <input type="number" [(ngModel)]="newItem.salePrice" name="salePrice" step="0.01" min="0">
+        <div class="form-group" *ngIf="newItem.availability === 'SALE' || newItem.availability === 'BOTH'">
+          <label>Sale Price *</label>
+          <input type="number" [(ngModel)]="newItem.salePrice" name="salePrice" step="0.01" min="0" required>
         </div>
-        <div class="form-group">
-          <label>Rent Price (per day)</label>
-          <input type="number" [(ngModel)]="newItem.rentPrice" name="rentPrice" step="0.01" min="0">
+        <div class="form-group" *ngIf="newItem.availability === 'RENT' || newItem.availability === 'BOTH'">
+          <label>Rent Price (per day) *</label>
+          <input type="number" [(ngModel)]="newItem.rentPrice" name="rentPrice" step="0.01" min="0" required>
         </div>
       </div>
 
@@ -202,13 +202,13 @@
       </div>
 
       <div class="form-row">
-        <div class="form-group">
-          <label>Sale Price</label>
-          <input type="number" [(ngModel)]="editItem.salePrice" name="editSalePrice" step="0.01" min="0">
+        <div class="form-group" *ngIf="editItem.availability === 'SALE' || editItem.availability === 'BOTH'">
+          <label>Sale Price *</label>
+          <input type="number" [(ngModel)]="editItem.salePrice" name="editSalePrice" step="0.01" min="0" required>
         </div>
-        <div class="form-group">
-          <label>Rent Price (per day)</label>
-          <input type="number" [(ngModel)]="editItem.rentPrice" name="editRentPrice" step="0.01" min="0">
+        <div class="form-group" *ngIf="editItem.availability === 'RENT' || editItem.availability === 'BOTH'">
+          <label>Rent Price (per day) *</label>
+          <input type="number" [(ngModel)]="editItem.rentPrice" name="editRentPrice" step="0.01" min="0" required>
         </div>
       </div>
 

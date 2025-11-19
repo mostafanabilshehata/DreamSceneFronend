@@ -15,6 +15,7 @@ export interface Product {
     availability: 'sale' | 'rent' | 'both';
     salePrice?: number;
     rentPrice?: number;
+    stockQuantity: number;
 }
 
 export interface CartItem {
