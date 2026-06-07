@@ -1,4 +1,6 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:8081/api'
+  apiUrl: '/api',
+  cloudinaryCloudName: 'dkknxgneb',
+  cloudinaryUploadPreset: 'dreamscene_unsigned'
 };

@@ -1,0 +1,10 @@
+{
+  "/api": {
+    "target": "http://localhost:9999",
+    "secure": false,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/api": "/.netlify/functions/api"
+    }
+  }
+}

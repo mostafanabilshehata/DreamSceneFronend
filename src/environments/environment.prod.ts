@@ -1,4 +1,6 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://dreamscenebackend-production.up.railway.app/api'
+  apiUrl: '/api',
+  cloudinaryCloudName: 'dkknxgneb',
+  cloudinaryUploadPreset: 'dreamscene_unsigned'
 };
