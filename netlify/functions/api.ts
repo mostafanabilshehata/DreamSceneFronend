@@ -18,7 +18,7 @@ cloudinary.config({
 
 // ─── CORS ─────────────────────────────────────────────────────────────────────
 const allowedOrigins = () =>
-  (process.env.CORS_ORIGINS || 'http://localhost:4200,https://dreamscene.netlify.app')
+  (process.env.CORS_ORIGINS || 'http://localhost:4200,https://dreamscene.netlify.apphttps://dream-scene.com,https://www.dream-scene.com')
     .split(',')
     .map((s) => s.trim());
 
