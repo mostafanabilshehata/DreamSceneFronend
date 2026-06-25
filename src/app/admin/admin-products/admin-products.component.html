@@ -30,8 +30,8 @@
           </td>
           <td>{{ item.name }}</td>
           <td>Category ID: {{ item.categoryId }} / Subcategory ID: {{ item.subcategoryId }}</td>
-          <td>{{ item.salePrice ? ('$' + item.salePrice) : '-' }}</td>
-          <td>{{ item.rentPrice ? ('$' + item.rentPrice + '/day') : '-' }}</td>
+          <td>{{ item.salePrice ? (item.salePrice | currency:'USD') : '-' }}</td>
+          <td>{{ item.rentPrice ? (item.rentPrice | currency:'USD') + '/day' : '-' }}</td>
           <td>
             <span class="badge" [ngClass]="getAvailabilityBadgeClass(item.availability)">
               {{ item.availability }}

@@ -20,7 +20,7 @@
                             <span class=" font-sm ">{{image.category.name}}</span>
                             <h3 class="h6 fw-bold font-sm ">{{image.title.split(' ').slice(0,2).join(' ')}}</h3>
                             <div class="d-flex align-items-center justify-content-between">
-                                <span class="text-muted fw-bold font-sm">{{image.price}} EGP</span>
+                                <span class="text-muted fw-bold font-sm">{{image.price | currency:'USD'}}</span>
                                 <div>
                                     <i class="fas fa-star rating-color"></i>
                                     <span class="text-muted fw-bold font-sm">{{image.ratingsAverage}}</span>

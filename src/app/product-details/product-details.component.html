@@ -40,13 +40,13 @@
     <div class="d-flex align-items-center justify-content-between mb-2" *ngIf="itemDetails?.salePrice">
         <div>
             <span class="text-muted">Sale Price:</span>
-            <h4 class="text-success fw-bold mb-0">{{itemDetails?.salePrice}} EGP</h4>
+            <h4 class="text-success fw-bold mb-0">{{itemDetails?.salePrice | currency:'USD'}}</h4>
         </div>
     </div>
     <div class="d-flex align-items-center justify-content-between mb-2" *ngIf="itemDetails?.rentPrice">
         <div>
             <span class="text-muted">Rent Price:</span>
-            <h4 class="text-primary fw-bold mb-0">{{itemDetails?.rentPrice}} EGP/day</h4>
+            <h4 class="text-primary fw-bold mb-0">{{itemDetails?.rentPrice | currency:'USD'}}/day</h4>
         </div>
     </div>
 </div>
@@ -99,7 +99,7 @@
                placeholder="Number of days"
                style="max-width: 200px;">
         <small class="text-muted" *ngIf="itemDetails?.availability === 'RENT'">
-            Total: {{(itemDetails?.rentPrice || 0) * selectedQuantity * selectedRentDays}} EGP
+            Total: {{(itemDetails?.rentPrice || 0) * selectedQuantity * selectedRentDays | currency:'USD'}}
         </small>
     </div>
 
@@ -109,7 +109,7 @@
             [disabled]="!isInStock()"
             (click)="addToBuy()">
         <i class="fas fa-shopping-cart me-2"></i>
-        Add to Cart (Buy) - {{itemDetails?.salePrice}} EGP
+        Add to Cart (Buy) - {{itemDetails?.salePrice | currency:'USD'}}
     </button>
     
     <!-- Show Rent button ONLY if item is for RENT only -->
@@ -118,7 +118,7 @@
             [disabled]="!isInStock()"
             (click)="addToRent()">
         <i class="fas fa-calendar-alt me-2"></i>
-        Add to Cart (Rent) - {{itemDetails?.rentPrice}} EGP/day
+        Add to Cart (Rent) - {{itemDetails?.rentPrice | currency:'USD'}}/day
     </button>
     
     <!-- Show BOTH buttons if item supports BOTH -->
@@ -127,7 +127,7 @@
             [disabled]="!isInStock()"
             (click)="addToBuy()">
         <i class="fas fa-shopping-cart me-2"></i>
-        Add to Cart (Buy) - {{itemDetails?.salePrice}} EGP
+        Add to Cart (Buy) - {{itemDetails?.salePrice | currency:'USD'}}
     </button>
     
     <button class="pbtn bg-primary text-white w-100 mb-2" 
@@ -135,7 +135,7 @@
             [disabled]="!isInStock()"
             (click)="addToRent()">
         <i class="fas fa-calendar-alt me-2"></i>
-        Add to Cart (Rent) - {{itemDetails?.rentPrice}} EGP/day × {{selectedRentDays}} days
+        Add to Cart (Rent) - {{itemDetails?.rentPrice | currency:'USD'}}/day × {{selectedRentDays}} days
     </button>
     
     <!-- Out of Stock message -->

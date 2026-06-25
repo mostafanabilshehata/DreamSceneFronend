@@ -33,7 +33,7 @@
             </div>
           </td>
           <td>{{ order.items.length || 0 }} items</td>
-          <td class="fw-bold text-success">{{ getTotalAmount(order) }} EGP</td>
+          <td class="fw-bold text-success">{{ getTotalAmount(order) | currency:'USD' }}</td>
           <td>
             <span class="status-badge" [ngClass]="getStatusBadgeClass(order.status)">
               {{ order.status }}
@@ -128,19 +128,19 @@
           <div class="item-details">
             <span>Quantity: {{ item.quantity }}</span>
             <span *ngIf="item.type === 'RENT' && item.rentDays"> × {{ item.rentDays }} days</span>
-            <span class="item-price">{{ item.price }} EGP</span>
+            <span class="item-price">{{ item.price | currency:'USD' }}</span>
           </div>
           <div class="item-total">
-            <span *ngIf="item.type === 'SALE'">{{ item.price * item.quantity }} EGP</span>
+            <span *ngIf="item.type === 'SALE'">{{ item.price * item.quantity | currency:'USD' }}</span>
             <span *ngIf="item.type === 'RENT' && item.rentDays">
-              {{ item.price * item.quantity * item.rentDays }} EGP
+              {{ item.price * item.quantity * item.rentDays | currency:'USD' }}
             </span>
           </div>
         </div>
       </div>
       <div class="total-section">
         <strong>Total Amount:</strong>
-        <strong class="text-success">{{ getTotalAmount(selectedOrder) }} EGP</strong>
+        <strong class="text-success">{{ getTotalAmount(selectedOrder) | currency:'USD' }}</strong>
       </div>
     </div>
     </div>

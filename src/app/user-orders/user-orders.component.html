@@ -64,7 +64,7 @@
             </div>
             <div class="text-end">
               <div class="text-muted small">Total Amount</div>
-              <h4 class="mb-0 text-success">{{order.totalAmount || calculateOrderTotal(order)}} EGP</h4>
+              <h4 class="mb-0 text-success">{{(order.totalAmount || calculateOrderTotal(order)) | currency:'USD'}}</h4>
             </div>
           </div>
           
@@ -135,13 +135,13 @@
                       <span *ngIf="item.type === 'RENT' && item.rentDays">{{item.rentDays}} days</span>
                       <span *ngIf="item.type === 'SALE'">-</span>
                     </td>
-                    <td>{{item.price}} EGP</td>
+                    <td>{{item.price | currency:'USD'}}</td>
                     <td class="text-end fw-bold">
                       <span *ngIf="item.type === 'SALE'">
-                        {{item.price * item.quantity}} EGP
+                        {{item.price * item.quantity | currency:'USD'}}
                       </span>
                       <span *ngIf="item.type === 'RENT' && item.rentDays">
-                        {{item.price * item.quantity * item.rentDays}} EGP
+                        {{item.price * item.quantity * item.rentDays | currency:'USD'}}
                       </span>
                     </td>
                   </tr>
