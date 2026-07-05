@@ -1,5 +1,4 @@
 import express, { Request, Response, NextFunction } from 'express';
-import serverless from 'serverless-http';
 import { neon } from '@neondatabase/serverless';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
@@ -17,10 +16,17 @@ cloudinary.config({
 });
 
 // ─── CORS ─────────────────────────────────────────────────────────────────────
+// Default includes localhost (dev), Netlify domain, custom domain, and Vercel domain.
+// On Vercel, each Preview/Production deploy gets a unique *.vercel.app URL, so we also
+// allow any *.vercel.app origin to make local testing of previews frictionless.
 const allowedOrigins = () =>
-  (process.env.CORS_ORIGINS || 'http://localhost:4200,https://dreamscene.netlify.app,https://dream-scene.com,https://www.dream-scene.com')
+  (
+    process.env.CORS_ORIGINS ||
+    'http://localhost:4200,https://dreamscene.netlify.app,https://dream-scene.com,https://www.dream-scene.com'
+  )
     .split(',')
-    .map((s) => s.trim());
+    .map((s) => s.trim())
+    .filter(Boolean);
 
 app.use(
   cors({
@@ -37,16 +43,6 @@ app.use(
 );
 
 app.use(express.json({ limit: '10mb' }));
-
-// ─── Path normalisation (local dev via netlify functions:serve) ───────────────
-// Locally, the path arrives as /.netlify/functions/api/xxx → rewrite to /api/xxx
-app.use((req, _res, next) => {
-  const prefix = '/.netlify/functions/api';
-  if (req.path.startsWith(prefix)) {
-    req.url = '/api' + req.url.slice(prefix.length);
-  }
-  next();
-});
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 const getDb = () => neon(process.env.DATABASE_URL!);
@@ -104,7 +100,6 @@ app.post('/api/auth/login', async (req, res) => {
   }
 });
 
-// Utility endpoint – call once after deploy to set admin password, then leave it
 app.get('/api/auth/reset-admin-password', async (_req, res) => {
   try {
     const sql = getDb();
@@ -137,7 +132,6 @@ app.post('/api/verification/send-code', async (req, res) => {
       INSERT INTO verification_codes (email, code, expires_at, verified)
       VALUES (${email}, ${code}, ${expiresAt}, false)
     `;
-    // Only send email if Brevo credentials are configured
     if (process.env.BREVO_EMAIL && process.env.BREVO_API_KEY) {
       const transporter = nodemailer.createTransport({
         host: 'smtp-relay.brevo.com',
@@ -152,9 +146,6 @@ app.post('/api/verification/send-code', async (req, res) => {
         text: `Your verification code is: ${code}\n\nThis code expires in 10 minutes.\n\nIf you did not request this, ignore this email.`,
       });
     }
-    // Code is always saved to DB — if email is not configured,
-    // retrieve the code from your Neon SQL Editor for testing:
-    // SELECT code FROM verification_codes WHERE email = 'test@example.com';
     return ok(res, 'Verification code sent successfully', null);
   } catch (e: any) {
     return fail(res, 500, 'Failed to send verification code: ' + e.message);
@@ -180,7 +171,7 @@ app.post('/api/verification/verify-code', async (req, res) => {
 });
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// CATEGORIES  (more-specific routes first)
+// CATEGORIES
 // ═══════════════════════════════════════════════════════════════════════════════
 app.get('/api/categories', async (_req, res) => {
   try {
@@ -357,7 +348,7 @@ app.delete('/api/admin/subcategories/:id', requireAdmin, async (req, res) => {
 });
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// PRODUCTS  (search before :id to avoid route conflict)
+// PRODUCTS
 // ═══════════════════════════════════════════════════════════════════════════════
 app.get('/api/products/search', async (req, res) => {
   try {
@@ -514,7 +505,7 @@ app.delete('/api/admin/products/:id', requireAdmin, async (req, res) => {
 });
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// PARTNERS  (category route before :id to avoid conflict)
+// PARTNERS
 // ═══════════════════════════════════════════════════════════════════════════════
 app.get('/api/partners/category/:category', async (req, res) => {
   try {
@@ -622,7 +613,6 @@ app.post('/api/orders', async (req, res) => {
     }
     const sql = getDb();
 
-    // Validate products and compute total
     let totalAmount = 0;
     const enrichedItems: any[] = [];
 
@@ -640,7 +630,6 @@ app.post('/api/orders', async (req, res) => {
       enrichedItems.push({ ...item, productName: product.name, unitPrice });
     }
 
-    // Insert order
     const orderRows = await sql`
       INSERT INTO orders (user_name, user_email, user_phone, total_amount, status)
       VALUES (${userName}, ${userEmail}, ${userPhone}, ${totalAmount}, 'PENDING')
@@ -648,7 +637,6 @@ app.post('/api/orders', async (req, res) => {
     `;
     const order = orderRows[0];
 
-    // Insert items
     const insertedItems: any[] = [];
     for (const item of enrichedItems) {
       const itemRows = await sql`
@@ -779,7 +767,6 @@ app.get('/api/admin/orders/:id', requireAdmin, async (req, res) => {
 
 app.put('/api/admin/orders/:id/status', requireAdmin, async (req, res) => {
   try {
-    // Status can come from query param (original API) or body
     const status = (req.query.status || req.body?.status) as string;
     const rejectionReason = req.query.rejectionReason || req.body?.rejectionReason || null;
     const validStatuses = ['PENDING', 'APPROVED', 'COMPLETED', 'REJECTED'];
@@ -903,14 +890,12 @@ app.delete('/api/admin/special-orders/:id', requireAdmin, async (req, res) => {
 });
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// IMAGE MANAGEMENT  (upload handled client-side via Cloudinary unsigned preset)
+// IMAGE MANAGEMENT
 // ═══════════════════════════════════════════════════════════════════════════════
 app.delete('/api/admin/delete-image', requireAdmin, async (req, res) => {
   try {
     const imageUrl = req.query.url as string;
     if (!imageUrl) return fail(res, 400, 'url query parameter is required');
-    // Extract public_id from Cloudinary URL
-    // e.g. https://res.cloudinary.com/cloud/image/upload/v123/dreamscene/abc.jpg → dreamscene/abc
     const match = imageUrl.match(/\/upload\/(?:v\d+\/)?(.+?)(?:\.\w+)?$/);
     if (match?.[1]) {
       await cloudinary.uploader.destroy(match[1]);
@@ -924,4 +909,5 @@ app.delete('/api/admin/delete-image', requireAdmin, async (req, res) => {
 // ─── 404 fallback ─────────────────────────────────────────────────────────────
 app.use((_req, res) => res.status(404).json({ success: false, message: 'Endpoint not found' }));
 
-export const handler = serverless(app);
+// Vercel Serverless Function export — @vercel/node runs the default export
+export default app;
